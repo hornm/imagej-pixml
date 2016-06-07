@@ -7,6 +7,7 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
 import org.scijava.command.CommandService;
+import org.scijava.module.ModuleService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.PluginService;

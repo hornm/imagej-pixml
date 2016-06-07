@@ -10,9 +10,11 @@ import weka.classifiers.AbstractClassifier;
 
 @Plugin(type = Classifier.class)
 public class WekaClassifier implements Classifier<AbstractClassifier, WekaClassifierConfig> {
+	
+	private WekaClassifierConfig classifierConfig;
 
 	@Override
-	public String getName() {
+	public String toString() {
 		return "Weka Classifier";
 	}
 
@@ -23,8 +25,7 @@ public class WekaClassifier implements Classifier<AbstractClassifier, WekaClassi
 
 	@Override
 	public void configure(WekaClassifierConfig classifierConfig) {
-		// TODO Auto-generated method stub
-		
+		this.classifierConfig = classifierConfig;
 	}
 
 	@Override
@@ -38,7 +39,7 @@ public class WekaClassifier implements Classifier<AbstractClassifier, WekaClassi
 	public <T extends RealType<T>> void predict(RandomAccessibleInterval<T> img, RandomAccessibleInterval<?> res,
 			AbstractClassifier model) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

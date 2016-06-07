@@ -16,16 +16,14 @@ import net.imglib2.view.composite.RealComposite;
  * 
  * @author Martin Horn
  */
-public interface Classifier<M extends Serializable, CC extends ClassifierConfig> extends SciJavaPlugin {
+public interface Classifier<M extends Serializable, C extends ClassifierConfig> extends SciJavaPlugin {
 	
-	String getName();
-
 	/**
 	 * @return an optional command to configure the classifier
 	 */
-	Class<CC> getClassifierConfigClass();
+	Class<C> getClassifierConfigClass();
 	
-	void configure(CC classifierConfig);
+	void configure(C classifierConfig);
 
 	/**
 	 * Won't be called before the {@link #configure(ClassifierConfig)}-method
