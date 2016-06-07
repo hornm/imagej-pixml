@@ -4,6 +4,6 @@ import java.io.Serializable;
 
 import org.scijava.command.Command;
 
-public interface FeatureConfig extends Command, Serializable {
-	
+public interface FeatureSetConfig extends Command, Serializable {
+
 }

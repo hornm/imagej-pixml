@@ -20,10 +20,20 @@ public interface Classifier<M extends Serializable, CC extends ClassifierConfig>
 	
 	String getName();
 
+	/**
+	 * @return an optional command to configure the classifier
+	 */
 	Class<CC> getClassifierConfigClass();
 	
 	void configure(CC classifierConfig);
 
+	/**
+	 * Won't be called before the {@link #configure(ClassifierConfig)}-method
+	 * 
+	 * @param img
+	 * @param annotation
+	 * @return
+	 */
 	<T extends RealType<T>, L> M train(RandomAccessibleInterval<RealComposite<T>> img,
 			ImgLabeling<L, ? extends RealType<?>> annotation);
 

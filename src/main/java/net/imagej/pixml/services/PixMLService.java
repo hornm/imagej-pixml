@@ -5,17 +5,17 @@ import java.util.List;
 import org.scijava.service.Service;
 
 import net.imagej.pixml.Classifier;
-import net.imagej.pixml.Feature;
+import net.imagej.pixml.FeatureSet;
 
 public interface PixMLService extends Service {
 
 	List<Classifier> getClassifiers();
 	
-	List<Feature> getFeatures();
+	List<FeatureSet> getFeatures();
 
 	ClassifiersConfig getClassifiersConfig();
 	
-	FeaturesConfig getFeaturesConfig();
+	FeatureSetsConfig getFeaturesConfig();
 	
 	//TODO convenient methods to calculate features, training, and prediction
 	

@@ -5,12 +5,12 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import net.imagej.pixml.Feature;
+import net.imagej.pixml.FeatureSet;
 
-public interface FeaturesConfig extends Serializable{
+public interface FeatureSetsConfig extends Serializable{
 	
 	JPanel getConfigPanel();
 	
-	List<Feature> getSelectedFeatures();
+	List<FeatureSet> getSelectedFeatureSets();
 
 }

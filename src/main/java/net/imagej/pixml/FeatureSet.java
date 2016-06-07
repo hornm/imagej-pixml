@@ -6,14 +6,14 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.FloatType;
 
-public interface Feature<FC extends FeatureConfig> extends SciJavaPlugin {
+public interface FeatureSet<FC extends FeatureSetConfig> extends SciJavaPlugin {
 	
 	String getName();
-
-	Class<FC> getFeatureConfigClass();
 	
-	void configure(FC featureConfig);
-
+	void configure(FC featureSetConfig);
+	
+	Class<FC> getFeatureSetConfigClass();
+	
 	<T extends RealType<T>> void calc(RandomAccessibleInterval<T> img, RandomAccessibleInterval<FloatType> out);
 
 }

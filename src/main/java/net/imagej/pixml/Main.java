@@ -29,9 +29,15 @@
  * #L%
  */
 
-package net.imagej.ops.pixml;
+package net.imagej.pixml;
 
+import org.scijava.Context;
+import org.scijava.service.SciJavaService;
+
+import io.scif.SCIFIOService;
 import net.imagej.ImageJ;
+import net.imagej.ImageJService;
+import net.imagej.pixml.services.PixMLService;
 
 /**
  * Launches ImageJ.
@@ -60,7 +66,9 @@ public final class Main {
 	 * @return The newly launched ImageJ instance.
 	 */
 	public static ImageJ launch(final String... args) {
-		final ImageJ ij = new ImageJ();
+		Context c = new Context(SciJavaService.class, SCIFIOService.class,
+				ImageJService.class, PixMLService.class);
+		final ImageJ ij = new ImageJ(c);
 		ij.launch(args);
 
 		return ij;
