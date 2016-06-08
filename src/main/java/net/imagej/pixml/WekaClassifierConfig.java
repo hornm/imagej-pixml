@@ -1,13 +1,14 @@
 package net.imagej.pixml;
 
+import org.scijava.command.Command;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 import weka.classifiers.Classifier;
 import weka.classifiers.trees.J48;
 
-@Plugin(type = ClassifierConfig.class, label = "Weka Classifier Configuration")
-public class WekaClassifierConfig implements ClassifierConfig {
+@Plugin(type = Command.class, label = "Weka Classifier Configuration")
+public class WekaClassifierConfig implements Command {
 	
 	@Parameter(label = "Weka Classifier")
 	private Classifier classifier = new J48();

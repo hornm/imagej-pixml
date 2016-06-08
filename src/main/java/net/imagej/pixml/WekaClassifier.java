@@ -11,7 +11,7 @@ import net.imglib2.view.composite.RealComposite;
 import weka.classifiers.AbstractClassifier;
 
 @Plugin(type = Classifier.class)
-public class WekaClassifier implements Classifier<AbstractClassifier, WekaClassifierConfig> {
+public class WekaClassifier implements Classifier<AbstractClassifier>, Configurable<WekaClassifierConfig> {
 	
 	private WekaClassifierConfig classifierConfig;
 
@@ -19,10 +19,10 @@ public class WekaClassifier implements Classifier<AbstractClassifier, WekaClassi
 	public String toString() {
 		return "Weka Classifier";
 	}
-
+	
 	@Override
-	public Optional<Class<WekaClassifierConfig>> getClassifierConfigClass() {
-		return Optional.of(WekaClassifierConfig.class);
+	public Class<WekaClassifierConfig> getConfigCommandClass() {
+		return WekaClassifierConfig.class;
 	}
 
 	@Override

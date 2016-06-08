@@ -1,9 +1,11 @@
 package net.imagej.pixml.services;
 
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import javax.swing.JButton;
@@ -11,7 +13,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
-import org.jsoup.select.Collector;
 import org.scijava.command.Command;
 import org.scijava.command.CommandModule;
 import org.scijava.command.CommandService;
@@ -23,9 +24,8 @@ import org.scijava.service.AbstractService;
 import org.scijava.thread.ThreadService;
 
 import net.imagej.pixml.Classifier;
-import net.imagej.pixml.ClassifierConfig;
+import net.imagej.pixml.Configurable;
 import net.imagej.pixml.FeatureSet;
-import net.imagej.pixml.FeatureSetConfig;
 
 @Plugin(type = PixMLService.class)
 public class DefaultPixMLService extends AbstractService implements PixMLService {
@@ -67,35 +67,14 @@ public class DefaultPixMLService extends AbstractService implements PixMLService
 				return new JPanel() {
 					{
 						add(comboBox);
-
 						JButton config = new JButton("configure");
-
 						comboBox.addActionListener(l -> {
-							Classifier c = (Classifier) comboBox.getSelectedItem();
-							config.setEnabled(c.getClassifierConfigClass().isPresent());
+							config.setEnabled(comboBox.getSelectedItem() instanceof Configurable);
 						});
-
-						config.addActionListener(l -> {
-							Classifier c = (Classifier) comboBox.getSelectedItem();
-							Future<CommandModule> f = commandService
-									.run((Class<? extends Command>) c.getClassifierConfigClass().get(), true);
-							// ugly code here -> cleaner solution required
-							// reason to run it in an extra thread: action
-							// listener event runs in the Event Dispatcher
-							// Thread and Future.get() would block it -> config
-							// dialog won't open
-							threadService.run(() -> {
-								try {
-									c.configure((ClassifierConfig) f.get().getDelegateObject());
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-							});
-						});
+						config.addActionListener(
+								createConfigAction(() -> (Configurable<Command>) comboBox.getSelectedItem()));
 						add(config);
-						
-						Classifier c = (Classifier) comboBox.getSelectedItem();
-						config.setEnabled(c.getClassifierConfigClass().isPresent());
+						config.setEnabled(comboBox.getSelectedItem() instanceof Configurable);
 					}
 				};
 			}
@@ -155,23 +134,8 @@ public class DefaultPixMLService extends AbstractService implements PixMLService
 			add(checkbox);
 
 			JButton config = new JButton("Configure");
-			config.setEnabled(fs.getFeatureSetConfigClass().isPresent());
-			config.addActionListener(l -> {
-				Future<CommandModule> f = commandService
-						.run((Class<? extends Command>) fs.getFeatureSetConfigClass().get(), true);
-				// ugly code here -> cleaner solution required
-				// reason to run it in an extra thread: action
-				// listener event runs in the Event Dispatcher
-				// Thread and Future.get() would block it -> config
-				// dialog won't open
-				threadService.run(() -> {
-					try {
-						fs.configure((FeatureSetConfig) f.get().getDelegateObject());
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				});
-			});
+			config.setEnabled(fs instanceof Configurable);
+			config.addActionListener(createConfigAction(() -> (Configurable<Command>) fs));
 			add(config);
 		}
 
@@ -183,6 +147,25 @@ public class DefaultPixMLService extends AbstractService implements PixMLService
 			return fs;
 		}
 
+	}
+
+	private ActionListener createConfigAction(Supplier<Configurable<Command>> s) {
+		return l -> {
+			Future<CommandModule> f = commandService
+					.run((Class<? extends Command>) s.get().getConfigCommandClass(), true);
+			// ugly code here -> cleaner solution required
+			// reason to run it in an extra thread: action
+			// listener event runs in the Event Dispatcher
+			// Thread and Future.get() would block it -> config
+			// dialog won't open
+			threadService.run(() -> {
+				try {
+					s.get().configure((Command) f.get().getDelegateObject());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
+		};
 	}
 
 }

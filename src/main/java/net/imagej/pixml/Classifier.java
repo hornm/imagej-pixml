@@ -12,22 +12,16 @@ import net.imglib2.view.composite.RealComposite;
 
 /**
  * 
+ * TODO: if classifiers need configuration, they can just implement the {@link Configurable} interface
+ * 
  * @param M
  *            the (serializable) model
  * 
  * @author Martin Horn
  */
-public interface Classifier<M extends Serializable, C extends ClassifierConfig> extends SciJavaPlugin {
+public interface Classifier<M extends Serializable> extends SciJavaPlugin {
 	
 	/**
-	 * @return an optional command to configure the classifier
-	 */
-	Optional<Class<C>> getClassifierConfigClass();
-	
-	void configure(C classifierConfig);
-
-	/**
-	 * Won't be called before the {@link #configure(ClassifierConfig)}-method
 	 * 
 	 * @param img
 	 * @param annotation

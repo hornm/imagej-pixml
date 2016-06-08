@@ -1,10 +1,11 @@
 package net.imagej.pixml;
 
+import org.scijava.command.Command;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
-@Plugin(type = FeatureSetConfig.class)
-public class TestFeatureSetConfig implements FeatureSetConfig {
+@Plugin(type = Command.class)
+public class TestFeatureSetConfig implements Command {
 	
 	@Parameter
 	private double featureParam1;
