@@ -11,7 +11,7 @@ public interface PixMLService extends Service {
 
 	List<Classifier> getClassifiers();
 	
-	List<FeatureSet> getFeatures();
+	List<FeatureSet> getFeatureSets();
 
 	ClassifiersConfig getClassifiersConfig();
 	

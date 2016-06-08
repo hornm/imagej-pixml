@@ -15,6 +15,9 @@ public class WekaClassifierConfig implements ClassifierConfig {
 	@Parameter(label = "Sampling Rate")
 	private double samplingRate = 1.0;
 	
+	@Parameter(label = "Homogenize Classes")
+	private boolean homogenizeClasses;
+	
 	@Parameter
 	private String tmp = "test";
 	

@@ -1,6 +1,7 @@
 package net.imagej.pixml;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import org.scijava.plugin.SciJavaPlugin;
 
@@ -21,7 +22,7 @@ public interface Classifier<M extends Serializable, C extends ClassifierConfig> 
 	/**
 	 * @return an optional command to configure the classifier
 	 */
-	Class<C> getClassifierConfigClass();
+	Optional<Class<C>> getClassifierConfigClass();
 	
 	void configure(C classifierConfig);
 

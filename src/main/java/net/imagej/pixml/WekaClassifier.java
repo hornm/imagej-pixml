@@ -1,5 +1,7 @@
 package net.imagej.pixml;
 
+import java.util.Optional;
+
 import org.scijava.plugin.Plugin;
 
 import net.imglib2.RandomAccessibleInterval;
@@ -19,8 +21,8 @@ public class WekaClassifier implements Classifier<AbstractClassifier, WekaClassi
 	}
 
 	@Override
-	public Class<WekaClassifierConfig> getClassifierConfigClass() {
-		return WekaClassifierConfig.class;
+	public Optional<Class<WekaClassifierConfig>> getClassifierConfigClass() {
+		return Optional.of(WekaClassifierConfig.class);
 	}
 
 	@Override
