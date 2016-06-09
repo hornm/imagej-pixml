@@ -10,6 +10,7 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.widget.Button;
 
+import net.imagej.Dataset;
 import net.imagej.pixml.Classifier;
 import net.imagej.pixml.FeatureSets;
 import net.imagej.pixml.service.AnnotationManager;
@@ -43,19 +44,21 @@ public class PixML<M extends Serializable> implements Command {
 
 	@Parameter(label = "Open Annotation Manager", callback = "onOpenAnnotationManager")
 	private Button button;
+	
 	// TODO
 	// @Parameter
 	// private RichImg?? output;
 
 	@Override
 	public void run() {
-		// 1. create dialog to configure features and the classifier (done by the framework)
+		// 1. create dialog to configure features and the classifier (done by
+		// the framework)
 		// 2. get an annotated image (e.g. via the annotation service)
 		// 3. calculate
 		// 4. e.g. push the result via the DisplayService to a Display (a the
 		// display that is for instance backed by the bigdataviewer)
 	}
-	
+
 	private void onOpenAnnotationManager() {
 		commandService.run(AnnotationManager.class, true);
 	}

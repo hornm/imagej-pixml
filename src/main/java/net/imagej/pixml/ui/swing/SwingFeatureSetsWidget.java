@@ -12,7 +12,9 @@ import javax.swing.JPanel;
 
 import org.scijava.Context;
 import org.scijava.command.Command;
+import org.scijava.convert.Converter;
 import org.scijava.plugin.Plugin;
+import org.scijava.prefs.PrefService;
 import org.scijava.ui.swing.widget.SwingInputWidget;
 import org.scijava.widget.InputWidget;
 import org.scijava.widget.WidgetModel;
@@ -22,6 +24,13 @@ import net.imagej.pixml.FeatureSet;
 import net.imagej.pixml.FeatureSets;
 import net.imagej.pixml.service.PixMLService;
 
+/**
+ * TODO: make the selection persistent, e.g. by using (and modifing) the
+ * {@link PrefService} and providing the right to/from string {@link Converter}
+ * s.
+ * 
+ * @author Martin Horn
+ */
 @Plugin(type = InputWidget.class)
 public class SwingFeatureSetsWidget extends SwingInputWidget<FeatureSets> {
 

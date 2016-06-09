@@ -12,6 +12,7 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 import net.imagej.ops.AbstractOp;
+import net.imagej.ops.special.function.AbstractBinaryFunctionOp;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.roi.labeling.ImgLabeling;
@@ -29,24 +30,22 @@ import weka.core.Instance;
 import weka.core.Instances;
 
 @Plugin(type = PixmlNamespace.Train.class)
-public class WekaTrain<T extends RealType<T>, L> extends AbstractOp implements PixmlNamespace.Train {
-
-	@Parameter
-	private RandomAccessibleInterval<RealComposite<T>> featImg;
-
-	@Parameter
-	private ImgLabeling<L, ? extends IntegerType<?>> classes;
+public class WekaTrain<T extends RealType<T>, L> extends
+		AbstractBinaryFunctionOp<RandomAccessibleInterval<RealComposite<T>>, ImgLabeling<L, ? extends IntegerType<?>>, Classifier>
+		implements PixmlNamespace.Train {
 
 	@Parameter
 	private Classifier classifier;
-
+	
 	@Parameter(required = false)
 	private double samplingRate = 1.0;
+	
 
-	// TODO: sub-sampling
 	// TODO: class balancing
-
-	public void run() {
+	
+	@Override
+	public Classifier compute2(RandomAccessibleInterval<RealComposite<T>> featImg,
+			ImgLabeling<L, ? extends IntegerType<?>> classes) {
 		if (!Intervals.equalDimensions(featImg, classes)) {
 			throw new IllegalArgumentException("Feature and class image dimensions don't match.");
 		}
@@ -94,7 +93,7 @@ public class WekaTrain<T extends RealType<T>, L> extends AbstractOp implements P
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		return classifier;
 	}
 
 	private Instances createInstances(int numFeat, List<String> classLabels) {
@@ -109,5 +108,4 @@ public class WekaTrain<T extends RealType<T>, L> extends AbstractOp implements P
 		instances.setClassIndex(instances.numAttributes() - 1);
 		return instances;
 	}
-
 }

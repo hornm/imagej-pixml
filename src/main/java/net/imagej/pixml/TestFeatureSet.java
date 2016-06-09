@@ -2,6 +2,8 @@ package net.imagej.pixml;
 
 import org.scijava.plugin.Plugin;
 
+import net.imagej.ops.OpRef;
+import net.imagej.ops.special.hybrid.UnaryHybridCF;
 import net.imagej.pixml.commands.TestFeatureSetConfig;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
@@ -27,18 +29,17 @@ public class TestFeatureSet implements FeatureSet, Configurable<TestFeatureSetCo
 		return 1;
 	}
 
-	@Override
-	public <I extends RealType<I>, O extends RealType<O>> void calc(RandomAccessibleInterval<I> img,
-			RandomAccessibleInterval<O>[] out) {
-		
-	}
 	
 	@Override
 	public String toString() {
 		return "Test Feature Set";
 	}
-	
 
+	@Override
+	public <I extends RealType<I>, O extends RealType<O>> UnaryHybridCF<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>[]> calcOp() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 
 }

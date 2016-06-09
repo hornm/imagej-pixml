@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import org.scijava.plugin.Plugin;
 
+import net.imagej.ops.OpRef;
+import net.imagej.ops.special.function.BinaryFunctionOp;
+import net.imagej.ops.special.hybrid.BinaryHybridCF;
 import net.imagej.pixml.OtherClassifier.MyModel;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.roi.labeling.ImgLabeling;
@@ -18,22 +21,21 @@ public class OtherClassifier implements Classifier<MyModel> {
 	}
 
 	@Override
-	public <T extends RealType<T>, L> MyModel train(RandomAccessibleInterval<RealComposite<T>> img,
-			ImgLabeling<L, ? extends RealType<?>> annotation) {
+	public String toString() {
+		return "Other Classifier";
+	}
+
+	@Override
+	public <T extends RealType<T>, L> BinaryFunctionOp<RandomAccessibleInterval<RealComposite<T>>, ImgLabeling<L, ? extends RealType<?>>, MyModel> trainOp() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <T extends RealType<T>> void predict(RandomAccessibleInterval<T> img, RandomAccessibleInterval<?> res,
-			MyModel model) {
+	public <T extends RealType<T>> BinaryHybridCF<RandomAccessibleInterval<T>, MyModel, RandomAccessibleInterval<?>> predictOp() {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
-	
-	@Override
-	public String toString() {
-		return "Other Classifier";
-	}
+
 
 }

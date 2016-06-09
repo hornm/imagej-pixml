@@ -5,14 +5,15 @@ import org.scijava.plugin.Parameter;
 import org.scijava.widget.InputHarvester;
 
 import net.imagej.pixml.service.PixMLService;
+import net.imagej.pixml.ui.swing.SwingClassifierWidget;
 
 
 /**
- * A class that is that Configurable is associated with a 'config' command C. After
+ * A class that is Configurable is associated with a 'config' command C. After
  * instantiating, populating the command's C {@link Parameter}s (potentially by opening a
  * configure dialog, see {@link InputHarvester}) and running it, the config object is
  * passed to the {@link Configurable#configure(Command)}-method. All this
- * takes, e.g., place in {@link PixMLService#getClassifiersConfig()}.
+ * takes, e.g., place in {@link SwingClassifierWidget}.
  * 
  * @author Martin Horn
  */
