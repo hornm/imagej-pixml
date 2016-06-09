@@ -1,4 +1,4 @@
-package net.imagej.pixml;
+package net.imagej.pixml.ui;
 
 import org.scijava.widget.InputWidget;
 

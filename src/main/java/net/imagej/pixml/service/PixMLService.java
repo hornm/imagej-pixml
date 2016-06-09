@@ -1,4 +1,4 @@
-package net.imagej.pixml.services;
+package net.imagej.pixml.service;
 
 import java.util.List;
 
@@ -13,10 +13,6 @@ public interface PixMLService extends Service {
 	
 	List<FeatureSet> getFeatureSets();
 
-	ClassifiersConfig getClassifiersConfig();
-	
-	FeatureSetsConfig getFeaturesConfig();
-	
 	//TODO convenient methods to calculate features, training, and prediction
 	
 }

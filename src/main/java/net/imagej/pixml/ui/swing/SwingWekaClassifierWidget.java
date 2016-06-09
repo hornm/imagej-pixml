@@ -1,4 +1,4 @@
-package net.imagej.pixml;
+package net.imagej.pixml.ui.swing;
 
 import javax.swing.JPanel;
 
@@ -7,6 +7,7 @@ import org.scijava.ui.swing.widget.SwingInputWidget;
 import org.scijava.widget.InputWidget;
 import org.scijava.widget.WidgetModel;
 
+import net.imagej.pixml.ui.WekaClassifierWidget;
 import weka.classifiers.Classifier;
 import weka.gui.GenericObjectEditor;
 import weka.gui.PropertyPanel;

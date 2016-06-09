@@ -37,7 +37,7 @@ import org.scijava.service.SciJavaService;
 import io.scif.SCIFIOService;
 import net.imagej.ImageJ;
 import net.imagej.ImageJService;
-import net.imagej.pixml.services.PixMLService;
+import net.imagej.pixml.service.PixMLService;
 
 /**
  * Launches ImageJ.

@@ -1,4 +1,4 @@
-package net.imagej.ops.pixml;
+package net.imagej.pixml.ops;
 
 import org.scijava.plugin.Plugin;
 
@@ -28,13 +28,13 @@ public class PixmlNamespace extends AbstractNamespace {
 
 	// -- PixML Namespace built-in methods --
 
-	@OpMethod(op = net.imagej.ops.pixml.PixmlNamespace.Train.class)
+	@OpMethod(op = net.imagej.pixml.ops.PixmlNamespace.Train.class)
 	public Object train(final Object... args) {
-		return ops().run(net.imagej.ops.pixml.PixmlNamespace.Train.class, args);
+		return ops().run(net.imagej.pixml.ops.PixmlNamespace.Train.class, args);
 	}
 	
-	@OpMethod(op = net.imagej.ops.pixml.PixmlNamespace.Predict.class)
+	@OpMethod(op = net.imagej.pixml.ops.PixmlNamespace.Predict.class)
 	public Object predict(final Object... args) {
-		return ops().run(net.imagej.ops.pixml.PixmlNamespace.Predict.class, args);
+		return ops().run(net.imagej.pixml.ops.PixmlNamespace.Predict.class, args);
 	}
 }

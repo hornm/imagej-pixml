@@ -4,7 +4,7 @@ import org.scijava.command.Command;
 import org.scijava.plugin.Parameter;
 import org.scijava.widget.InputHarvester;
 
-import net.imagej.pixml.services.PixMLService;
+import net.imagej.pixml.service.PixMLService;
 
 
 /**

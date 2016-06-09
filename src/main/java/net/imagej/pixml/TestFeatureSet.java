@@ -2,6 +2,7 @@ package net.imagej.pixml;
 
 import org.scijava.plugin.Plugin;
 
+import net.imagej.pixml.commands.TestFeatureSetConfig;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 

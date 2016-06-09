@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.scijava.plugin.Plugin;
 
+import net.imagej.pixml.commands.WekaClassifierConfig;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.type.numeric.RealType;

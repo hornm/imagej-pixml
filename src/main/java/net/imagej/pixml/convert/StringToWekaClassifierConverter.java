@@ -1,4 +1,4 @@
-package net.imagej.pixml;
+package net.imagej.pixml.convert;
 
 import org.scijava.convert.AbstractConverter;
 import org.scijava.convert.Converter;

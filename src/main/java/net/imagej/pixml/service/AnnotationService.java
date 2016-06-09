@@ -1,4 +1,4 @@
-package net.imagej.pixml.services;
+package net.imagej.pixml.service;
 
 import org.scijava.service.SciJavaService;
 import org.scijava.tool.Tool;

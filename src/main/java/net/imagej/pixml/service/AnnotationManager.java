@@ -1,4 +1,4 @@
-package net.imagej.pixml.services;
+package net.imagej.pixml.service;
 
 import java.awt.FlowLayout;
 import java.awt.GridLayout;

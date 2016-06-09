@@ -1,4 +1,4 @@
-package net.imagej.ops.pixml;
+package net.imagej.pixml.ops;
 
 import java.io.IOException;
 

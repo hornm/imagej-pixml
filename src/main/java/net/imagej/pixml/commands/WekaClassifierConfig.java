@@ -1,4 +1,4 @@
-package net.imagej.pixml;
+package net.imagej.pixml.commands;
 
 import org.scijava.command.Command;
 import org.scijava.plugin.Parameter;
