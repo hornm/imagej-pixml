@@ -6,7 +6,7 @@ import org.scijava.plugin.Plugin;
 
 import net.imagej.ops.OpRef;
 import net.imagej.ops.special.hybrid.UnaryHybridCF;
-import net.imagej.pixml.commands.TestFeatureSetConfig;
+import net.imagej.pixml.command.TestFeatureSetConfig;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 

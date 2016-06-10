@@ -12,7 +12,7 @@ import net.imagej.ops.Ops.Filter.Mean;
 import net.imagej.ops.filter.mean.MeanFilterOp;
 import net.imagej.ops.special.hybrid.AbstractUnaryHybridCF;
 import net.imagej.ops.special.hybrid.UnaryHybridCF;
-import net.imagej.pixml.commands.MeanFeatureConfig;
+import net.imagej.pixml.command.MeanFeatureConfig;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.RectangleShape;
 import net.imglib2.outofbounds.OutOfBoundsBorderFactory;

@@ -1,4 +1,4 @@
-package net.imagej.pixml.commands;
+package net.imagej.pixml.command;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,6 +14,7 @@ import org.scijava.ui.UIService;
 import org.scijava.widget.Button;
 
 import net.imagej.ImgPlus;
+import net.imagej.overlay.Overlay;
 import net.imagej.pixml.Classifier;
 import net.imagej.pixml.FeatureSets;
 import net.imagej.pixml.service.AnnotationManager;
@@ -54,6 +55,9 @@ public class PixML<F extends RealType<F>> implements Command {
 
 	@Parameter
 	private ImgPlus inputImg;
+	
+	@Parameter
+	private Overlay overlay;
 
 	// @Parameter
 	// private ImgLabeling labels;

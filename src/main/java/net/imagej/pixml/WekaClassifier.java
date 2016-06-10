@@ -13,7 +13,7 @@ import net.imagej.ops.OpRef;
 import net.imagej.ops.OpService;
 import net.imagej.ops.special.function.BinaryFunctionOp;
 import net.imagej.ops.special.hybrid.BinaryHybridCF;
-import net.imagej.pixml.commands.WekaClassifierConfig;
+import net.imagej.pixml.command.WekaClassifierConfig;
 import net.imagej.pixml.ops.WekaTrain;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.roi.labeling.ImgLabeling;
