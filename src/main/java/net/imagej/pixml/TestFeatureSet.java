@@ -1,5 +1,7 @@
 package net.imagej.pixml;
 
+import java.util.List;
+
 import org.scijava.plugin.Plugin;
 
 import net.imagej.ops.OpRef;
@@ -36,10 +38,9 @@ public class TestFeatureSet implements FeatureSet, Configurable<TestFeatureSetCo
 	}
 
 	@Override
-	public <I extends RealType<I>, O extends RealType<O>> UnaryHybridCF<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>[]> calcOp() {
+	public <I extends RealType<I>, O extends RealType<O>> UnaryHybridCF<RandomAccessibleInterval<I>, List<RandomAccessibleInterval<O>>> calcOp() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 }

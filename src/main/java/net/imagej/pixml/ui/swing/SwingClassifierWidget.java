@@ -2,7 +2,9 @@ package net.imagej.pixml.ui.swing;
 
 import java.awt.event.ActionListener;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.function.Supplier;
 
@@ -53,6 +55,7 @@ public class SwingClassifierWidget<M extends Serializable> extends SwingInputWid
 		JButton config = new JButton("configure");
 		comboBox.addActionListener(l -> {
 			config.setEnabled(comboBox.getSelectedItem() instanceof Configurable);
+			updateModel();
 		});
 		config.addActionListener(
 				createConfigAction(() -> (Configurable<Command>) comboBox.getSelectedItem(), model.getContext()));
@@ -64,7 +67,7 @@ public class SwingClassifierWidget<M extends Serializable> extends SwingInputWid
 
 	@Override
 	protected void doRefresh() {
-		comboBox.setSelectedItem((Classifier<M>) get().getValue());
+		comboBox.setSelectedItem(get().getValue());
 	}
 
 	@Override

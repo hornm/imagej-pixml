@@ -87,11 +87,15 @@ public class SwingFeatureSetsWidget extends SwingInputWidget<FeatureSets> {
 		public FeatureSetPanel(FeatureSet fs, Context c) {
 			this.fs = fs;
 			checkbox = new JCheckBox(fs.toString());
+			checkbox.addActionListener(l -> {
+				updateModel();
+			});
 			add(checkbox);
 
 			JButton config = new JButton("Configure");
 			config.setEnabled(fs instanceof Configurable);
-			config.addActionListener(SwingClassifierWidget.createConfigAction(() -> (Configurable<Command>) fs, c));
+			config.addActionListener(
+					SwingClassifierWidget.createConfigAction(() -> (Configurable<Command>) fs, c));
 			add(config);
 		}
 

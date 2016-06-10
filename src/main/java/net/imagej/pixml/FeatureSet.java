@@ -1,5 +1,7 @@
 package net.imagej.pixml;
 
+import java.util.List;
+
 import org.scijava.plugin.SciJavaPlugin;
 
 import net.imagej.ops.OpRef;
@@ -18,6 +20,6 @@ public interface FeatureSet extends SciJavaPlugin {
 	 * {@link OpRef} that calculates the features.
 	 * 
 	 */
-	<I extends RealType<I>, O extends RealType<O>> UnaryHybridCF<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>[]> calcOp();
+	<I extends RealType<I>, O extends RealType<O>> UnaryHybridCF<RandomAccessibleInterval<I>, List<RandomAccessibleInterval<O>>> calcOp();
 
 }
