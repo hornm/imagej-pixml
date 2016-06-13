@@ -1,15 +1,8 @@
 package net.imagej.pixml;
 
-import java.util.Optional;
-
-import org.scijava.options.OptionsService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
-import com.jcraft.jsch.jce.Random;
-
-import net.imagej.ops.OpMatchingService;
-import net.imagej.ops.OpRef;
 import net.imagej.ops.OpService;
 import net.imagej.ops.special.function.BinaryFunctionOp;
 import net.imagej.ops.special.hybrid.BinaryHybridCF;
@@ -20,6 +13,7 @@ import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.composite.RealComposite;
 import weka.classifiers.AbstractClassifier;
+import weka.classifiers.trees.J48;
 
 @Plugin(type = Classifier.class)
 public class WekaClassifier implements Classifier<AbstractClassifier>, Configurable<WekaClassifierConfig> {
@@ -27,7 +21,9 @@ public class WekaClassifier implements Classifier<AbstractClassifier>, Configura
 	@Parameter
 	private OpService opService;
 
-	private WekaClassifierConfig classifierConfig;
+	private weka.classifiers.Classifier wekaClassifier = new J48();
+	
+	private double samplingRate = 0.1;
 
 	@Override
 	public String toString() {
@@ -41,20 +37,25 @@ public class WekaClassifier implements Classifier<AbstractClassifier>, Configura
 
 	@Override
 	public void configure(WekaClassifierConfig classifierConfig) {
-		this.classifierConfig = classifierConfig;
+		wekaClassifier = classifierConfig.getClassifier();
+		samplingRate = classifierConfig.getSamplingRate();
 	}
 
 	@Override
 	public <T extends RealType<T>, L> BinaryFunctionOp<RandomAccessibleInterval<RealComposite<T>>, ImgLabeling<L, ? extends RealType<?>>, AbstractClassifier> trainOp() {
 		return (BinaryFunctionOp<RandomAccessibleInterval<RealComposite<T>>, ImgLabeling<L, ? extends RealType<?>>, AbstractClassifier>) opService
-				.op(WekaTrain.class, Classifier.class, RandomAccessibleInterval.class, ImgLabeling.class,
-						weka.classifiers.Classifier.class, Double.class);
+				.op(WekaTrain.class, RandomAccessibleInterval.class, ImgLabeling.class, wekaClassifier, samplingRate);
 	}
 
 	@Override
 	public <T extends RealType<T>> BinaryHybridCF<RandomAccessibleInterval<T>, AbstractClassifier, RandomAccessibleInterval<?>> predictOp() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean canHandle(Object model) {
+		return model instanceof weka.classifiers.Classifier;
 	}
 
 }

@@ -27,11 +27,11 @@ public class WekaClassifierConfig implements Command {
 		//
 	}
 	
-	Classifier getClassifier() {
+	public Classifier getClassifier() {
 		return classifier;
 	}
 	
-	double getSamplingRate() {
+	public double getSamplingRate() {
 		return samplingRate;
 	}
 	

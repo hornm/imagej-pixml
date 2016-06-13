@@ -17,7 +17,7 @@ public interface FeatureSet extends SciJavaPlugin {
 	int getNumFeatures();
 
 	/**
-	 * {@link OpRef} that calculates the features.
+	 * {@link UnaryHybridCF}-op that calculates the features.
 	 * 
 	 */
 	<I extends RealType<I>, O extends RealType<O>> UnaryHybridCF<RandomAccessibleInterval<I>, List<RandomAccessibleInterval<O>>> calcOp();

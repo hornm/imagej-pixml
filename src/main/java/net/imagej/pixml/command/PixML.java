@@ -14,12 +14,12 @@ import org.scijava.ui.UIService;
 import org.scijava.widget.Button;
 
 import net.imagej.ImgPlus;
-import net.imagej.overlay.Overlay;
 import net.imagej.pixml.Classifier;
 import net.imagej.pixml.FeatureSets;
 import net.imagej.pixml.service.AnnotationManager;
 import net.imagej.pixml.service.PixMLService;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
 import net.imglib2.view.composite.RealComposite;
@@ -53,17 +53,11 @@ public class PixML<F extends RealType<F>> implements Command {
 	@Parameter(label = "Features")
 	private FeatureSets featureSets;
 
-	@Parameter
+	@Parameter(label = "Source Image")
 	private ImgPlus inputImg;
 	
-	@Parameter
-	private Overlay overlay;
-
-	// @Parameter
-	// private ImgLabeling labels;
-
-	@Parameter(label = "Open Annotation Manager", callback = "onOpenAnnotationManager")
-	private Button button;
+	@Parameter(label = "Label Image")
+	private ImgPlus labelImg;
 
 	// TODO
 	// @Parameter
@@ -81,9 +75,11 @@ public class PixML<F extends RealType<F>> implements Command {
 		uiService.show(featImgs.get(0));
 		RandomAccessibleInterval<RealComposite<F>> composite = composite(featImgs);
 		
-		//TODO: we need to get the ImgLabeling from somewhere
-		// Object model = classifier.trainOp().compute2(composite, null);
+		//TODO: we need to get the ImgLabeling from somewhere else
+		ImgLabeling labeling = new ImgLabeling<>(labelImg);
+		 Object model = classifier.trainOp().compute2(composite, labeling);
 		// classifier.predictOp().compute2(inputImg, model);
+		 System.out.println("");
 		
 		
 		/*

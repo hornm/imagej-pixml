@@ -36,6 +36,11 @@ public class OtherClassifier implements Classifier<MyModel> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public boolean canHandle(Object model) {
+		return model instanceof MyModel;
+	}
 
 
 }
