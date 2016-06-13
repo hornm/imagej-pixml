@@ -11,7 +11,6 @@ import org.scijava.plugin.Menu;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.ui.UIService;
-import org.scijava.widget.Button;
 
 import net.imagej.ImgPlus;
 import net.imagej.pixml.Classifier;
@@ -19,8 +18,10 @@ import net.imagej.pixml.FeatureSets;
 import net.imagej.pixml.service.AnnotationManager;
 import net.imagej.pixml.service.PixMLService;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.converter.Converters;
 import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.integer.IntType;
 import net.imglib2.view.Views;
 import net.imglib2.view.composite.RealComposite;
 
@@ -43,7 +44,7 @@ public class PixML<F extends RealType<F>> implements Command {
 
 	@Parameter
 	private CommandService commandService;
-	
+
 	@Parameter
 	private UIService uiService;
 
@@ -55,7 +56,7 @@ public class PixML<F extends RealType<F>> implements Command {
 
 	@Parameter(label = "Source Image")
 	private ImgPlus inputImg;
-	
+
 	@Parameter(label = "Label Image")
 	private ImgPlus labelImg;
 
@@ -74,14 +75,13 @@ public class PixML<F extends RealType<F>> implements Command {
 		List<RandomAccessibleInterval<F>> featImgs = calcFeatImgs();
 		uiService.show(featImgs.get(0));
 		RandomAccessibleInterval<RealComposite<F>> composite = composite(featImgs);
-		
-		//TODO: we need to get the ImgLabeling from somewhere else
-		ImgLabeling labeling = new ImgLabeling<>(labelImg);
-		 Object model = classifier.trainOp().compute2(composite, labeling);
+
+		// TODO: we need to get the ImgLabeling from somewhere else
+		ImgLabeling labeling = new ImgLabeling(indexImg(labelImg));
+		Object model = classifier.trainOp().compute2(composite, labeling);
 		// classifier.predictOp().compute2(inputImg, model);
-		 System.out.println("");
-		
-		
+		System.out.println("");
+
 		/*
 		 * 4. e.g. push the result via the DisplayService to a Display (a the
 		 * display that is for instance backed by the bigdataviewer)
@@ -94,9 +94,21 @@ public class PixML<F extends RealType<F>> implements Command {
 				.addAll((Collection<? extends RandomAccessibleInterval<F>>) fs.calcOp().compute1(inputImg)));
 		return featImgs;
 	}
-	
+
 	private RandomAccessibleInterval<RealComposite<F>> composite(List<RandomAccessibleInterval<F>> featImgs) {
 		return Views.collapseReal(Views.stack(featImgs));
+	}
+
+	private <T extends RealType<T>> RandomAccessibleInterval<IntType> indexImg(RandomAccessibleInterval<T> img) {
+
+		// possible TODO use more efficient data structure here
+		List<Double> values = new ArrayList<>();
+		for (T t : Views.iterable(img)) {
+			values.add(t.getRealDouble());
+		}
+		return Converters.convert(img, (s) -> {
+			return new IntType(values.indexOf(s.get().getRealDouble()));
+		});
 	}
 
 	private void onOpenAnnotationManager() {

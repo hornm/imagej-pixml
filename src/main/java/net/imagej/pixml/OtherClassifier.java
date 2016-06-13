@@ -4,12 +4,11 @@ import java.io.Serializable;
 
 import org.scijava.plugin.Plugin;
 
-import net.imagej.ops.OpRef;
 import net.imagej.ops.special.function.BinaryFunctionOp;
 import net.imagej.ops.special.hybrid.BinaryHybridCF;
 import net.imagej.pixml.OtherClassifier.MyModel;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.roi.labeling.ImgLabeling;
+import net.imglib2.roi.labeling.LabelingType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.composite.RealComposite;
 
@@ -26,7 +25,7 @@ public class OtherClassifier implements Classifier<MyModel> {
 	}
 
 	@Override
-	public <T extends RealType<T>, L> BinaryFunctionOp<RandomAccessibleInterval<RealComposite<T>>, ImgLabeling<L, ? extends RealType<?>>, MyModel> trainOp() {
+	public <T extends RealType<T>, L> BinaryFunctionOp<RandomAccessibleInterval<RealComposite<T>>, RandomAccessibleInterval<LabelingType<L>>, MyModel> trainOp() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -36,11 +35,10 @@ public class OtherClassifier implements Classifier<MyModel> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	@Override
 	public boolean canHandle(Object model) {
 		return model instanceof MyModel;
 	}
-
 
 }

@@ -11,15 +11,13 @@ import java.util.stream.StreamSupport;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
-import net.imagej.ops.AbstractOp;
 import net.imagej.ops.special.function.AbstractBinaryFunctionOp;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.roi.labeling.LabelRegion;
 import net.imglib2.roi.labeling.LabelRegionCursor;
 import net.imglib2.roi.labeling.LabelRegions;
-import net.imglib2.type.numeric.IntegerType;
+import net.imglib2.roi.labeling.LabelingType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Intervals;
 import net.imglib2.view.composite.RealComposite;
@@ -31,21 +29,20 @@ import weka.core.Instances;
 
 @Plugin(type = PixmlNamespace.Train.class)
 public class WekaTrain<T extends RealType<T>, L> extends
-		AbstractBinaryFunctionOp<RandomAccessibleInterval<RealComposite<T>>, ImgLabeling<L, ? extends IntegerType<?>>, Classifier>
+		AbstractBinaryFunctionOp<RandomAccessibleInterval<RealComposite<T>>, RandomAccessibleInterval<LabelingType<L>>, Classifier>
 		implements PixmlNamespace.Train {
 
 	@Parameter
 	private Classifier classifier;
-	
+
 	@Parameter(required = false)
 	private double samplingRate = 1.0;
-	
 
 	// TODO: class balancing
-	
+
 	@Override
 	public Classifier compute2(RandomAccessibleInterval<RealComposite<T>> featImg,
-			ImgLabeling<L, ? extends IntegerType<?>> classes) {
+			RandomAccessibleInterval<LabelingType<L>> classes) {
 		if (!Intervals.equalDimensions(featImg, classes)) {
 			throw new IllegalArgumentException("Feature and class image dimensions don't match.");
 		}
@@ -67,11 +64,11 @@ public class WekaTrain<T extends RealType<T>, L> extends
 			LabelRegionCursor regCur = region.cursor();
 			while (regCur.hasNext()) {
 				regCur.fwd();
-				
+
 				if (samplingRate < 1.0 && rand.nextDouble() >= samplingRate) {
 					continue;
 				}
-				
+
 				featRA.setPosition(regCur);
 
 				double[] featVec = new double[numFeat];
