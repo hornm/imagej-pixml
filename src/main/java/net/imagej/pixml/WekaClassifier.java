@@ -10,6 +10,7 @@ import net.imagej.pixml.command.WekaClassifierConfig;
 import net.imagej.pixml.ops.WekaTrain;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.roi.labeling.ImgLabeling;
+import net.imglib2.roi.labeling.LabelingType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.composite.RealComposite;
 import weka.classifiers.AbstractClassifier;
@@ -22,7 +23,7 @@ public class WekaClassifier implements Classifier<AbstractClassifier>, Configura
 	private OpService opService;
 
 	private weka.classifiers.Classifier wekaClassifier = new J48();
-	
+
 	private double samplingRate = 0.1;
 
 	@Override
@@ -42,9 +43,11 @@ public class WekaClassifier implements Classifier<AbstractClassifier>, Configura
 	}
 
 	@Override
-	public <T extends RealType<T>, L> BinaryFunctionOp<RandomAccessibleInterval<RealComposite<T>>, ImgLabeling<L, ? extends RealType<?>>, AbstractClassifier> trainOp() {
-		return (BinaryFunctionOp<RandomAccessibleInterval<RealComposite<T>>, ImgLabeling<L, ? extends RealType<?>>, AbstractClassifier>) opService
-				.op(WekaTrain.class, RandomAccessibleInterval.class, ImgLabeling.class, wekaClassifier, samplingRate);
+	public <T extends RealType<T>, L> BinaryFunctionOp<RandomAccessibleInterval<RealComposite<T>>, RandomAccessibleInterval<LabelingType<L>>, AbstractClassifier> trainOp() {
+		return (BinaryFunctionOp<RandomAccessibleInterval<RealComposite<T>>, RandomAccessibleInterval<LabelingType<L>>, AbstractClassifier>) opService
+				.op(WekaTrain.class, RandomAccessibleInterval.class, RandomAccessibleInterval.class, wekaClassifier,
+						samplingRate);
+		;
 	}
 
 	@Override
