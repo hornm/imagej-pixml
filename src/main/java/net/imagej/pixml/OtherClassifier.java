@@ -1,6 +1,7 @@
 package net.imagej.pixml;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.scijava.plugin.Plugin;
 
@@ -10,6 +11,7 @@ import net.imagej.pixml.OtherClassifier.MyModel;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.roi.labeling.LabelingType;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.composite.RealComposite;
 
 @Plugin(type = Classifier.class)
@@ -31,7 +33,7 @@ public class OtherClassifier implements Classifier<MyModel> {
 	}
 
 	@Override
-	public <T extends RealType<T>> BinaryHybridCF<RandomAccessibleInterval<T>, MyModel, RandomAccessibleInterval<?>> predictOp() {
+	public <T extends RealType<T>> BinaryHybridCF<RandomAccessibleInterval<T>, MyModel, List<RandomAccessibleInterval<FloatType>>> predictDistrOp() {
 		// TODO Auto-generated method stub
 		return null;
 	}

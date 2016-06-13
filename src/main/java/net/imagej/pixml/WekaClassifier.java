@@ -1,5 +1,7 @@
 package net.imagej.pixml;
 
+import java.util.List;
+
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
@@ -9,9 +11,9 @@ import net.imagej.ops.special.hybrid.BinaryHybridCF;
 import net.imagej.pixml.command.WekaClassifierConfig;
 import net.imagej.pixml.ops.WekaTrain;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.roi.labeling.LabelingType;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.composite.RealComposite;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.trees.J48;
@@ -47,14 +49,14 @@ public class WekaClassifier implements Classifier<AbstractClassifier>, Configura
 		return (BinaryFunctionOp<RandomAccessibleInterval<RealComposite<T>>, RandomAccessibleInterval<LabelingType<L>>, AbstractClassifier>) opService
 				.op(WekaTrain.class, RandomAccessibleInterval.class, RandomAccessibleInterval.class, wekaClassifier,
 						samplingRate);
-		;
 	}
-
+	
 	@Override
-	public <T extends RealType<T>> BinaryHybridCF<RandomAccessibleInterval<T>, AbstractClassifier, RandomAccessibleInterval<?>> predictOp() {
+	public <T extends RealType<T>> BinaryHybridCF<RandomAccessibleInterval<T>, AbstractClassifier, List<RandomAccessibleInterval<FloatType>>> predictDistrOp() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 	@Override
 	public boolean canHandle(Object model) {

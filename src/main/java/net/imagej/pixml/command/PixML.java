@@ -2,6 +2,7 @@ package net.imagej.pixml.command;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import org.scijava.command.Command;
@@ -13,13 +14,16 @@ import org.scijava.plugin.Plugin;
 import org.scijava.ui.UIService;
 
 import net.imagej.ImgPlus;
+import net.imagej.ops.OpService;
 import net.imagej.pixml.Classifier;
 import net.imagej.pixml.FeatureSets;
 import net.imagej.pixml.service.AnnotationManager;
 import net.imagej.pixml.service.PixMLService;
+import net.imglib2.Cursor;
+import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.converter.Converters;
 import net.imglib2.roi.labeling.ImgLabeling;
+import net.imglib2.roi.labeling.LabelingType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.IntType;
 import net.imglib2.view.Views;
@@ -49,6 +53,9 @@ public class PixML<F extends RealType<F>> implements Command {
 	private UIService uiService;
 
 	@Parameter
+	private OpService ops;
+
+	@Parameter
 	private Classifier classifier;
 
 	@Parameter(label = "Features")
@@ -73,12 +80,11 @@ public class PixML<F extends RealType<F>> implements Command {
 		/* 2. get an annotated image (e.g. via the annotation service) */
 		/* 3. calculate features, train model and perform prediction */
 		List<RandomAccessibleInterval<F>> featImgs = calcFeatImgs();
-		uiService.show(featImgs.get(0));
+		// uiService.show(featImgs.get(0));
 		RandomAccessibleInterval<RealComposite<F>> composite = composite(featImgs);
 
 		// TODO: we need to get the ImgLabeling from somewhere else
-		ImgLabeling labeling = new ImgLabeling(indexImg(labelImg));
-		Object model = classifier.trainOp().compute2(composite, labeling);
+		Object model = classifier.trainOp().compute2(composite, toImgLabeling(labelImg));
 		// classifier.predictOp().compute2(inputImg, model);
 		System.out.println("");
 
@@ -99,16 +105,54 @@ public class PixML<F extends RealType<F>> implements Command {
 		return Views.collapseReal(Views.stack(featImgs));
 	}
 
-	private <T extends RealType<T>> RandomAccessibleInterval<IntType> indexImg(RandomAccessibleInterval<T> img) {
+	private <T extends RealType<T>> ImgLabeling<Double, IntType> toImgLabeling(IterableInterval<T> img) {
 
-		// possible TODO use more efficient data structure here
-		List<Double> values = new ArrayList<>();
-		for (T t : Views.iterable(img)) {
-			values.add(t.getRealDouble());
+		// FIXME: turning a image into a labeling by using views doesn't work
+		// and result in a AIOOBE, don't understand why, yet
+		// HashMap<Double, Integer> valueMap = new HashMap<>();
+		// List<Double> valueList = new ArrayList<>();
+		// int idx = 1;
+		// for (T t : Views.iterable(img)) {
+		// double val = t.getRealDouble();
+		// if (!valueMap.containsKey(val)) {
+		// valueMap.put(val, idx);
+		// idx++;
+		// valueList.add(val);
+		// }
+		// }
+		//
+		// RandomAccessibleInterval<IntType> indexImg = Converters.convert(img,
+		// (a,b) -> {
+		// b.set(valueMap.get(a.getRealDouble()));
+		// }, new IntType());
+		//
+		// uiService.show(indexImg);
+		//
+		// final ArrayList<Set<Double>> labelSets = new
+		// ArrayList<Set<Double>>();
+		// labelSets.add(new HashSet<Double>());
+		// for (int i = 1; i < valueList.size() + 1; ++i) {
+		// final HashSet<Double> set = new HashSet<Double>();
+		// set.add(valueList.get(i - 1));
+		// labelSets.add(set);
+		// }
+		//
+		// ImgLabeling<Double, IntType> res = new ImgLabeling<>(indexImg);
+		// new SerialisationAccess(res.getMapping()) {
+		// {
+		// super.setLabelSets(labelSets);
+		// }
+		// };
+
+		ImgLabeling<Double, IntType> imgLabeling = ops.create().imgLabeling(img, new IntType());
+		Cursor<T> imgC = img.cursor();
+		Cursor<LabelingType<Double>> labC = imgLabeling.cursor();
+		while (imgC.hasNext()) {
+			imgC.next();
+			labC.next();
+			labC.get().add(imgC.get().getRealDouble());
 		}
-		return Converters.convert(img, (s) -> {
-			return new IntType(values.indexOf(s.get().getRealDouble()));
-		});
+		return imgLabeling;
 	}
 
 	private void onOpenAnnotationManager() {
