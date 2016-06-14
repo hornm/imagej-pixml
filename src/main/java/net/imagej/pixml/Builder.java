@@ -11,7 +11,9 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.composite.RealComposite;
 
 public interface Builder<M extends Serializable> extends Command {
-
+	
+	Class<M> getModelClass();
+	
 	/**
 	 * TODO
 	 * 

@@ -29,6 +29,16 @@ public class WekaBuilder implements Builder<AbstractClassifier> {
 
 	@Parameter(label = "Homogenize Classes")
 	private boolean homogenizeClasses;
+	
+	@Override
+	public String toString() {
+		return "Weka Classifier Builder";
+	}
+	
+	@Override
+	public Class<AbstractClassifier> getModelClass() {
+		return AbstractClassifier.class;
+	}
 
 	@Override
 	public <T extends RealType<T>, L> BinaryFunctionOp<RandomAccessibleInterval<RealComposite<T>>, RandomAccessibleInterval<LabelingType<L>>, AbstractClassifier> buildOp() {

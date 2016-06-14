@@ -9,7 +9,6 @@ import org.scijava.plugin.Plugin;
 import net.imagej.ops.OpService;
 import net.imagej.ops.special.hybrid.AbstractUnaryHybridCF;
 import net.imagej.ops.special.hybrid.UnaryHybridCF;
-import net.imagej.pixml.command.MinimumFeatureConfig;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.HyperSphereShape;
 import net.imglib2.outofbounds.OutOfBoundsBorderFactory;
@@ -17,11 +16,11 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
 
 @Plugin(type = FeatureSet.class)
-public class MinimumFeature implements FeatureSet, Configurable<MinimumFeatureConfig> {
+public class MinimumFeature implements FeatureSet {
 
 	@Parameter
 	private OpService opService;
-	
+
 	private int radius = 1;
 
 	@Override
@@ -35,8 +34,8 @@ public class MinimumFeature implements FeatureSet, Configurable<MinimumFeatureCo
 
 			@Override
 			public void compute1(RandomAccessibleInterval<I> input, List<RandomAccessibleInterval<O>> output) {
-				opService.run("filter.min", Views.iterable(output.get(0)), input,
-						new HyperSphereShape( radius ), new OutOfBoundsBorderFactory<>());
+				opService.run("filter.min", Views.iterable(output.get(0)), input, new HyperSphereShape(radius),
+						new OutOfBoundsBorderFactory<>());
 			}
 
 			@Override
@@ -50,15 +49,4 @@ public class MinimumFeature implements FeatureSet, Configurable<MinimumFeatureCo
 	public String toString() {
 		return "Minimum";
 	}
-
-	@Override
-	public Class< MinimumFeatureConfig > getConfigCommandClass() {
-		return MinimumFeatureConfig.class;
-	}
-
-	@Override
-	public void configure( MinimumFeatureConfig config ) {
-		radius = config.getRadius();
-	}
-
 }

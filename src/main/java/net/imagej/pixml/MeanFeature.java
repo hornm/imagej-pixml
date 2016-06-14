@@ -9,7 +9,6 @@ import org.scijava.plugin.Plugin;
 import net.imagej.ops.OpService;
 import net.imagej.ops.special.hybrid.AbstractUnaryHybridCF;
 import net.imagej.ops.special.hybrid.UnaryHybridCF;
-import net.imagej.pixml.command.MeanFeatureConfig;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.RectangleShape;
 import net.imglib2.outofbounds.OutOfBoundsBorderFactory;
@@ -22,6 +21,7 @@ public class MeanFeature implements FeatureSet {
 	@Parameter
 	private OpService opService;
 
+	@Parameter
 	private int radius = 1;
 
 	@Override

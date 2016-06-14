@@ -58,6 +58,7 @@ public abstract class AbstractSelectConfigWidget<C extends Command> extends Swin
 		p.add(config);
 
 		getComponent().add(p);
+		updateModel();
 	}
 
 	@Override
@@ -108,6 +109,11 @@ public abstract class AbstractSelectConfigWidget<C extends Command> extends Swin
 
 		void set(O obj) {
 			this.obj = obj;
+		}
+		
+		@Override
+		public String toString() {
+			return obj.toString();
 		}
 	}
 

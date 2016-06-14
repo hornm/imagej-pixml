@@ -56,15 +56,15 @@ public class PixML<F extends RealType<F>> extends ContextCommand {
 
 	@Parameter
 	private OpService ops;
-	
-	@Parameter
+
+	@Parameter(callback = "onBuilderUpdate")
 	private Builder builder;
 
 	@Parameter
 	private Predictor predictor;
 
-//	@Parameter(label = "Features")
-//	private FeatureSets featureSets;
+	@Parameter(label = "Features")
+	private FeatureSets featureSets;
 
 	@Parameter(label = "Source Image")
 	private ImgPlus inputImg;
@@ -84,12 +84,13 @@ public class PixML<F extends RealType<F>> extends ContextCommand {
 		 */
 		/* 2. get an annotated image (e.g. via the annotation service) */
 		/* 3. calculate features, train model and perform prediction */
-//		List<RandomAccessibleInterval<F>> featImgs = calcFeatImgs();
+		List<RandomAccessibleInterval<F>> featImgs = calcFeatImgs();
 		// uiService.show(featImgs.get(0));
-//		RandomAccessibleInterval<RealComposite<F>> composite = composite(featImgs);
+		RandomAccessibleInterval<RealComposite<F>> composite = composite(featImgs);
 
 		// TODO: we need to get the ImgLabeling from somewhere else
-//		Object model = classifier.buildOp().compute2(composite, toImgLabeling(labelImg));
+		// Object model = classifier.buildOp().compute2(composite,
+		// toImgLabeling(labelImg));
 		// classifier.predictOp().compute2(inputImg, model);
 		System.out.println("");
 
@@ -99,12 +100,12 @@ public class PixML<F extends RealType<F>> extends ContextCommand {
 		 */
 	}
 
-//	private List<RandomAccessibleInterval<F>> calcFeatImgs() {
-//		List<RandomAccessibleInterval<F>> featImgs = new ArrayList<>();
-//		featureSets.forEach(fs -> featImgs
-//				.addAll((Collection<? extends RandomAccessibleInterval<F>>) fs.calcOp().compute1(inputImg)));
-//		return featImgs;
-//	}
+	private List<RandomAccessibleInterval<F>> calcFeatImgs() {
+		List<RandomAccessibleInterval<F>> featImgs = new ArrayList<>();
+		featureSets.forEach(fs -> featImgs
+				.addAll((Collection<? extends RandomAccessibleInterval<F>>) fs.calcOp().compute1(inputImg)));
+		return featImgs;
+	}
 
 	private RandomAccessibleInterval<RealComposite<F>> composite(List<RandomAccessibleInterval<F>> featImgs) {
 		return Views.collapseReal(Views.stack(featImgs));
@@ -160,8 +161,10 @@ public class PixML<F extends RealType<F>> extends ContextCommand {
 		return imgLabeling;
 	}
 
-	private void onOpenAnnotationManager() {
-		commandService.run(AnnotationManager.class, true);
+	void onBuilderUpdate() {
+		if (!builder.getModelClass().equals(predictor.getModelClass())) {
+			uiService.showDialog("Selected Builder and Predictor are not compatible with each other.");
+		}
 	}
 
 }

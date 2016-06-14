@@ -82,8 +82,8 @@ public class SwingFeatureSetsWidget extends SwingInputWidget<FeatureSets> {
 
 		private JCheckBox checkbox;
 
-		public FeatureSetPanel(FeatureSet fs, Context c) {
-			this.fs = fs;
+		public FeatureSetPanel(FeatureSet featureSet, Context c) {
+			this.fs = featureSet;
 			checkbox = new JCheckBox(fs.toString());
 			checkbox.addActionListener(l -> {
 				updateModel();
@@ -95,6 +95,7 @@ public class SwingFeatureSetsWidget extends SwingInputWidget<FeatureSets> {
 			// config.addActionListener(
 			// SwingClassifierWidget.createConfigAction(() ->
 			// (Configurable<Command>) fs, c));
+			config.addActionListener(AbstractSelectConfigWidget.createConfigAction(() -> fs, o -> fs = o, c));
 			add(config);
 		}
 

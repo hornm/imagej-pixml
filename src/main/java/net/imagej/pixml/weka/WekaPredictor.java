@@ -13,6 +13,16 @@ import weka.classifiers.AbstractClassifier;
 
 @Plugin(type = Predictor.class)
 public class WekaPredictor implements Predictor<AbstractClassifier> {
+	
+	@Override
+	public String toString() {
+		return "Weka Classifier Predictor";
+	}
+	
+	@Override
+	public Class<?> getModelClass() {
+		return AbstractClassifier.class;
+	}
 
 	@Override
 	public <T extends RealType<T>> BinaryHybridCF<RandomAccessibleInterval<T>, AbstractClassifier, List<RandomAccessibleInterval<FloatType>>> predictDistrOp() {

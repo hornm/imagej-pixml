@@ -19,7 +19,9 @@ import net.imglib2.view.StackView.StackAccessMode;
 import net.imglib2.view.Views;
 
 public interface Predictor<M extends Serializable> extends Command {
-
+	
+	Class<?> getModelClass();
+	
 	/**
 	 * TODO
 	 * 

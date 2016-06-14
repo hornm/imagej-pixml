@@ -9,7 +9,6 @@ import org.scijava.plugin.Plugin;
 import net.imagej.ops.OpService;
 import net.imagej.ops.special.hybrid.AbstractUnaryHybridCF;
 import net.imagej.ops.special.hybrid.UnaryHybridCF;
-import net.imagej.pixml.command.MedianFeatureConfig;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.HyperSphereShape;
 import net.imglib2.outofbounds.OutOfBoundsBorderFactory;
@@ -17,11 +16,11 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
 
 @Plugin(type = FeatureSet.class)
-public class MedianFeature implements FeatureSet, Configurable<MedianFeatureConfig> {
+public class MedianFeature implements FeatureSet {
 
 	@Parameter
 	private OpService opService;
-	
+
 	private int radius = 1;
 
 	@Override
@@ -35,8 +34,8 @@ public class MedianFeature implements FeatureSet, Configurable<MedianFeatureConf
 
 			@Override
 			public void compute1(RandomAccessibleInterval<I> input, List<RandomAccessibleInterval<O>> output) {
-				opService.run("filter.median", Views.iterable(output.get(0)), input,
-						new HyperSphereShape( radius ), new OutOfBoundsBorderFactory<>());
+				opService.run("filter.median", Views.iterable(output.get(0)), input, new HyperSphereShape(radius),
+						new OutOfBoundsBorderFactory<>());
 			}
 
 			@Override
@@ -49,16 +48,6 @@ public class MedianFeature implements FeatureSet, Configurable<MedianFeatureConf
 	@Override
 	public String toString() {
 		return "Median";
-	}
-
-	@Override
-	public Class< MedianFeatureConfig > getConfigCommandClass() {
-		return MedianFeatureConfig.class;
-	}
-
-	@Override
-	public void configure( MedianFeatureConfig config ) {
-		radius = config.getRadius();
 	}
 
 }
