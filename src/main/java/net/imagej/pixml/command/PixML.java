@@ -1,6 +1,5 @@
 package net.imagej.pixml.command;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -16,10 +15,8 @@ import org.scijava.ui.UIService;
 
 import net.imagej.ImgPlus;
 import net.imagej.ops.OpService;
-import net.imagej.pixml.Builder;
+import net.imagej.pixml.Classifier;
 import net.imagej.pixml.FeatureSets;
-import net.imagej.pixml.Predictor;
-import net.imagej.pixml.service.AnnotationManager;
 import net.imagej.pixml.service.PixMLService;
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
@@ -57,11 +54,8 @@ public class PixML<F extends RealType<F>> extends ContextCommand {
 	@Parameter
 	private OpService ops;
 
-	@Parameter(callback = "onBuilderUpdate")
-	private Builder builder;
-
 	@Parameter
-	private Predictor predictor;
+	private Classifier classifier;
 
 	@Parameter(label = "Features")
 	private FeatureSets featureSets;
@@ -159,12 +153,6 @@ public class PixML<F extends RealType<F>> extends ContextCommand {
 			labC.get().add(imgC.get().getRealDouble());
 		}
 		return imgLabeling;
-	}
-
-	void onBuilderUpdate() {
-		if (!builder.getModelClass().equals(predictor.getModelClass())) {
-			uiService.showDialog("Selected Builder and Predictor are not compatible with each other.");
-		}
 	}
 
 }

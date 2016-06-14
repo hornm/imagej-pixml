@@ -9,18 +9,34 @@ import org.scijava.plugin.Parameter;
 import net.imagej.ops.OpService;
 import net.imagej.ops.special.computer.AbstractUnaryComputerOp;
 import net.imagej.ops.special.computer.UnaryComputerOp;
+import net.imagej.ops.special.function.BinaryFunctionOp;
 import net.imagej.ops.special.hybrid.AbstractBinaryHybridCF;
 import net.imagej.ops.special.hybrid.BinaryHybridCF;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.roi.labeling.LabelingType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.FloatType;
-import net.imglib2.view.StackView.StackAccessMode;
 import net.imglib2.view.Views;
+import net.imglib2.view.StackView.StackAccessMode;
+import net.imglib2.view.composite.RealComposite;
 
-public interface Predictor<M extends Serializable> extends Command {
+/**
+ * TODO: better interface name! Because it's not really a classifier but more its definition.
+ * 
+ * @author Martin Horn
+ *
+ * @param <M>
+ */
+public interface Classifier<M extends Serializable> extends Command {
 	
-	Class<?> getModelClass();
+	Class<M> getModelClass();
+	
+	/**
+	 * TODO
+	 * 
+	 * @return
+	 */
+	<T extends RealType<T>, L> BinaryFunctionOp<RandomAccessibleInterval<RealComposite<T>>, RandomAccessibleInterval<LabelingType<L>>, M> buildOp();
 	
 	/**
 	 * TODO
