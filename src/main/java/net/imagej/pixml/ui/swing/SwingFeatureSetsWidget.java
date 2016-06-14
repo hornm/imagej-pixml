@@ -11,7 +11,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
 import org.scijava.Context;
-import org.scijava.command.Command;
 import org.scijava.convert.Converter;
 import org.scijava.plugin.Plugin;
 import org.scijava.prefs.PrefService;
@@ -19,7 +18,6 @@ import org.scijava.ui.swing.widget.SwingInputWidget;
 import org.scijava.widget.InputWidget;
 import org.scijava.widget.WidgetModel;
 
-import net.imagej.pixml.Configurable;
 import net.imagej.pixml.FeatureSet;
 import net.imagej.pixml.FeatureSets;
 import net.imagej.pixml.service.PixMLService;
@@ -93,9 +91,10 @@ public class SwingFeatureSetsWidget extends SwingInputWidget<FeatureSets> {
 			add(checkbox);
 
 			JButton config = new JButton("Configure");
-			config.setEnabled(fs instanceof Configurable);
-			config.addActionListener(
-					SwingClassifierWidget.createConfigAction(() -> (Configurable<Command>) fs, c));
+			// config.setEnabled(fs instanceof Configurable);
+			// config.addActionListener(
+			// SwingClassifierWidget.createConfigAction(() ->
+			// (Configurable<Command>) fs, c));
 			add(config);
 		}
 

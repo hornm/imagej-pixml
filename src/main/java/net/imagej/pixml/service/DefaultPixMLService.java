@@ -7,8 +7,9 @@ import org.scijava.plugin.Plugin;
 import org.scijava.plugin.PluginService;
 import org.scijava.service.AbstractService;
 
-import net.imagej.pixml.Classifier;
+import net.imagej.pixml.Builder;
 import net.imagej.pixml.FeatureSet;
+import net.imagej.pixml.Predictor;
 
 @Plugin(type = PixMLService.class)
 public class DefaultPixMLService extends AbstractService implements PixMLService {
@@ -17,8 +18,13 @@ public class DefaultPixMLService extends AbstractService implements PixMLService
 	private PluginService pluginService;
 
 	@Override
-	public List<Classifier> getClassifiers() {
-		return pluginService.createInstancesOfType(Classifier.class);
+	public List<Builder> getBuilders() {
+		return pluginService.createInstancesOfType(Builder.class);
+	}
+	
+	@Override
+	public List<Predictor> getPredictors() {
+		return pluginService.createInstancesOfType(Predictor.class);
 	}
 
 	@Override

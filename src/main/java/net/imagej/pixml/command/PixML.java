@@ -1,12 +1,13 @@
 package net.imagej.pixml.command;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 
 import org.scijava.command.Command;
 import org.scijava.command.CommandService;
+import org.scijava.command.ContextCommand;
 import org.scijava.menu.MenuConstants;
 import org.scijava.plugin.Menu;
 import org.scijava.plugin.Parameter;
@@ -15,8 +16,9 @@ import org.scijava.ui.UIService;
 
 import net.imagej.ImgPlus;
 import net.imagej.ops.OpService;
-import net.imagej.pixml.Classifier;
+import net.imagej.pixml.Builder;
 import net.imagej.pixml.FeatureSets;
+import net.imagej.pixml.Predictor;
 import net.imagej.pixml.service.AnnotationManager;
 import net.imagej.pixml.service.PixMLService;
 import net.imglib2.Cursor;
@@ -37,7 +39,7 @@ import net.imglib2.view.composite.RealComposite;
 @Plugin(type = Command.class, menu = {
 		@Menu(label = MenuConstants.PLUGINS_LABEL, weight = MenuConstants.PLUGINS_WEIGHT, mnemonic = MenuConstants.PLUGINS_MNEMONIC),
 		@Menu(label = "PixML ...", weight = 22) })
-public class PixML<F extends RealType<F>> implements Command {
+public class PixML<F extends RealType<F>> extends ContextCommand {
 
 	// @Parameter
 	// private AnnotationService annotationService; //or directly request an
@@ -54,12 +56,15 @@ public class PixML<F extends RealType<F>> implements Command {
 
 	@Parameter
 	private OpService ops;
+	
+	@Parameter
+	private Builder builder;
 
 	@Parameter
-	private Classifier classifier;
+	private Predictor predictor;
 
-	@Parameter(label = "Features")
-	private FeatureSets featureSets;
+//	@Parameter(label = "Features")
+//	private FeatureSets featureSets;
 
 	@Parameter(label = "Source Image")
 	private ImgPlus inputImg;
@@ -79,12 +84,12 @@ public class PixML<F extends RealType<F>> implements Command {
 		 */
 		/* 2. get an annotated image (e.g. via the annotation service) */
 		/* 3. calculate features, train model and perform prediction */
-		List<RandomAccessibleInterval<F>> featImgs = calcFeatImgs();
+//		List<RandomAccessibleInterval<F>> featImgs = calcFeatImgs();
 		// uiService.show(featImgs.get(0));
-		RandomAccessibleInterval<RealComposite<F>> composite = composite(featImgs);
+//		RandomAccessibleInterval<RealComposite<F>> composite = composite(featImgs);
 
 		// TODO: we need to get the ImgLabeling from somewhere else
-		Object model = classifier.trainOp().compute2(composite, toImgLabeling(labelImg));
+//		Object model = classifier.buildOp().compute2(composite, toImgLabeling(labelImg));
 		// classifier.predictOp().compute2(inputImg, model);
 		System.out.println("");
 
@@ -94,12 +99,12 @@ public class PixML<F extends RealType<F>> implements Command {
 		 */
 	}
 
-	private List<RandomAccessibleInterval<F>> calcFeatImgs() {
-		List<RandomAccessibleInterval<F>> featImgs = new ArrayList<>();
-		featureSets.forEach(fs -> featImgs
-				.addAll((Collection<? extends RandomAccessibleInterval<F>>) fs.calcOp().compute1(inputImg)));
-		return featImgs;
-	}
+//	private List<RandomAccessibleInterval<F>> calcFeatImgs() {
+//		List<RandomAccessibleInterval<F>> featImgs = new ArrayList<>();
+//		featureSets.forEach(fs -> featImgs
+//				.addAll((Collection<? extends RandomAccessibleInterval<F>>) fs.calcOp().compute1(inputImg)));
+//		return featImgs;
+//	}
 
 	private RandomAccessibleInterval<RealComposite<F>> composite(List<RandomAccessibleInterval<F>> featImgs) {
 		return Views.collapseReal(Views.stack(featImgs));

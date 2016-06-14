@@ -1,4 +1,4 @@
-package net.imagej.pixml.ops;
+package net.imagej.pixml.weka.ops;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,6 +12,8 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 import net.imagej.ops.special.function.AbstractBinaryFunctionOp;
+import net.imagej.pixml.ops.PixmlNamespace;
+import net.imagej.pixml.ops.PixmlNamespace.Train;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.roi.labeling.LabelRegion;

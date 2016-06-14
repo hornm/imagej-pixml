@@ -1,12 +1,11 @@
 package net.imagej.pixml.ui.swing;
 
 import java.awt.event.ActionListener;
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -16,71 +15,66 @@ import org.scijava.Context;
 import org.scijava.command.Command;
 import org.scijava.command.CommandModule;
 import org.scijava.command.CommandService;
-import org.scijava.plugin.Plugin;
+import org.scijava.plugin.PluginService;
 import org.scijava.thread.ThreadService;
 import org.scijava.ui.swing.widget.SwingInputWidget;
-import org.scijava.widget.InputWidget;
 import org.scijava.widget.WidgetModel;
-
-import net.imagej.pixml.Classifier;
-import net.imagej.pixml.Configurable;
-import net.imagej.pixml.service.PixMLService;
 
 /**
  * TODO: make selection persistent!
  * 
  * @author Martin Horn
  *
- * @param <M>
  */
-@Plugin(type = InputWidget.class)
-public class SwingClassifierWidget<M extends Serializable> extends SwingInputWidget<Classifier<M>> {
+public abstract class AbstractSelectConfigWidget<C extends Command> extends SwingInputWidget<C> {
 
-	private JComboBox<Classifier> comboBox;
+	private JComboBox<Wrapper<C>> comboBox;
 
 	@Override
-	public Classifier<M> getValue() {
-		return (Classifier<M>) comboBox.getSelectedItem();
+	public C getValue() {
+		return getSelectedItem().get();
 	}
+
+	abstract Class<C> getObjectClass();
 
 	@Override
 	public void set(WidgetModel model) {
 		super.set(model);
-		PixMLService pixmlService = model.getContext().getService(PixMLService.class);
-		List<Classifier> classifiers = pixmlService.getClassifiers();
-		comboBox = new JComboBox<>(classifiers.toArray(new Classifier[classifiers.size()]));
+		PluginService pluginService = model.getContext().getService(PluginService.class);
+		List<Wrapper<C>> classifiers = pluginService.createInstancesOfType(getObjectClass()).stream()
+				.map(o -> new Wrapper<C>(o)).collect(Collectors.toList());
+		comboBox = new JComboBox(classifiers.toArray(new Object[classifiers.size()]));
 
 		JPanel p = new JPanel();
 		p.add(comboBox);
 		JButton config = new JButton("configure");
 		comboBox.addActionListener(l -> {
-			config.setEnabled(comboBox.getSelectedItem() instanceof Configurable);
 			updateModel();
 		});
-		config.addActionListener(
-				createConfigAction(() -> (Configurable<Command>) comboBox.getSelectedItem(), model.getContext()));
+		config.addActionListener(createConfigAction(() -> getSelectedItem().get(), c -> {
+			getSelectedItem().set(c);
+			updateModel();
+		}, getContext()));
 		p.add(config);
-		config.setEnabled(comboBox.getSelectedItem() instanceof Configurable);
 
 		getComponent().add(p);
 	}
 
 	@Override
 	protected void doRefresh() {
-		comboBox.setSelectedItem(get().getValue());
+		comboBox.setSelectedItem(new Wrapper(get().getValue()));
 	}
 
 	@Override
 	public boolean supports(WidgetModel model) {
-		return super.supports(model) && model.isType(Classifier.class);
+		return super.supports(model) && model.isType(getObjectClass());
 	}
 
-	public static ActionListener createConfigAction(Supplier<Configurable<Command>> s, Context c) {
+	public static <C extends Command> ActionListener createConfigAction(Supplier<C> get, Consumer<C> set, Context c) {
 		CommandService commandService = c.getService(CommandService.class);
 		ThreadService threadService = c.getService(ThreadService.class);
 		return l -> {
-			Future<CommandModule> f = commandService.run((Class<? extends Command>) s.get().getConfigCommandClass(),
-					true);
+			Future<CommandModule> f = commandService.run(get.get().getClass(), true);
 			// ugly code here -> cleaner solution required
 			// reason to run it in an extra thread: action
 			// listener event runs in the Event Dispatcher
@@ -88,12 +82,33 @@ public class SwingClassifierWidget<M extends Serializable> extends SwingInputWid
 			// dialog won't open
 			threadService.run(() -> {
 				try {
-					s.get().configure((Command) f.get().getDelegateObject());
+					set.accept((C) f.get().getCommand());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			});
 		};
+	}
+
+	private Wrapper<C> getSelectedItem() {
+		return (Wrapper<C>) comboBox.getSelectedItem();
+	}
+
+	private class Wrapper<O> {
+
+		O obj;
+
+		public Wrapper(O obj) {
+			this.obj = obj;
+		}
+
+		O get() {
+			return obj;
+		}
+
+		void set(O obj) {
+			this.obj = obj;
+		}
 	}
 
 }
