@@ -8,8 +8,8 @@ Blockers:
 
 TODOs:
 - Cluster-interface
-- Model-Wrapper
 - Model/Classifier Display/Manager (to load/save/display models)
+- ...
 
 
 Commands:
