@@ -18,3 +18,22 @@ Commands:
 - Predict (requires a Model)
 - Cluster
 - Model Manager
+
+
+Use Cases:
+
+1. Feature Calculation + Build Model + (Optional) Predict
+- input: image and labeling
+- calculate features of the input image
+- build model based on the given feature image and labels
+- prediction of the same input images
+
+2. Feature Calculation + Prediction
+- input: (multiple) images + model (classifier, e.g. selected from a list of available models)
+- calculate features
+- prediction using the given model (needs to comply with the given features -> model must contain a specification of the features!!!)
+- advantage: model can be reused each for batch-processing
+
+3. Prediction only
+- input: feature image + model
+- prediction using the given model and features

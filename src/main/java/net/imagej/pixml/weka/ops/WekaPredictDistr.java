@@ -7,7 +7,6 @@ import java.util.stream.StreamSupport;
 import org.scijava.plugin.Plugin;
 
 import net.imagej.ops.special.hybrid.AbstractBinaryHybridCF;
-import net.imagej.pixml.ops.PixmlNamespace;
 import net.imagej.pixml.ops.PixmlNamespace.Predict;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
@@ -50,7 +49,7 @@ public class WekaPredictDistr<T extends RealType<T>> extends
 			AbstractClassifier input2) {
 		return null;
 	}
-	
+
 	private Instances createInstances(int numFeat, List<String> classLabels) {
 		// build training set
 		ArrayList<Attribute> attr = new ArrayList<Attribute>();

@@ -16,6 +16,7 @@ import org.scijava.ui.UIService;
 import net.imagej.ImgPlus;
 import net.imagej.ops.OpService;
 import net.imagej.pixml.Classifier;
+import net.imagej.pixml.ClassifierFactory;
 import net.imagej.pixml.FeatureSets;
 import net.imagej.pixml.service.PixMLService;
 import net.imglib2.Cursor;
@@ -55,7 +56,7 @@ public class PixML<F extends RealType<F>> extends ContextCommand {
 	private OpService ops;
 
 	@Parameter
-	private Classifier classifier;
+	private ClassifierFactory classifierFactory;
 
 	@Parameter(label = "Features")
 	private FeatureSets featureSets;
@@ -83,8 +84,8 @@ public class PixML<F extends RealType<F>> extends ContextCommand {
 		RandomAccessibleInterval<RealComposite<F>> composite = composite(featImgs);
 
 		// TODO: we need to get the ImgLabeling from somewhere else
-		// Object model = classifier.buildOp().compute2(composite,
-		// toImgLabeling(labelImg));
+		Classifier c = classifierFactory.createClassifier();
+		c.<F, Double> build(composite, toImgLabeling(labelImg));
 		// classifier.predictOp().compute2(inputImg, model);
 		System.out.println("");
 
