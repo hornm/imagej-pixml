@@ -24,7 +24,7 @@ public class DoGFeature implements FeatureSet {
 	private double sigma1 = 1;
 
 	@Parameter
-	private double sigma2 = 1;
+	private double sigma2 = 2;
 
 	@Override
 	public int getNumFeatures() {
