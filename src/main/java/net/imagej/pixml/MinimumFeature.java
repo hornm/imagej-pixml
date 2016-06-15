@@ -21,6 +21,7 @@ public class MinimumFeature implements FeatureSet {
 	@Parameter
 	private OpService opService;
 
+	@Parameter
 	private int radius = 1;
 
 	@Override

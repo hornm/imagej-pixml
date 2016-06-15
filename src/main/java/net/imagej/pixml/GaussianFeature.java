@@ -19,7 +19,8 @@ public class GaussianFeature implements FeatureSet {
 
 	@Parameter
 	private OpService opService;
-	
+
+	@Parameter
 	private double sigma = 1;
 
 	@Override
