@@ -26,6 +26,7 @@ import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.roi.labeling.LabelingType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.IntType;
+import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
 import net.imglib2.view.composite.RealComposite;
 
@@ -86,8 +87,8 @@ public class PixML<F extends RealType<F>> extends ContextCommand {
 		// TODO: we need to get the ImgLabeling from somewhere else
 		Classifier c = classifierFactory.createClassifier();
 		c.<F, Double> build(composite, toImgLabeling(labelImg));
-		// classifier.predictOp().compute2(inputImg, model);
-		System.out.println("");
+		List<IterableInterval<FloatType>> distr = c.predictDistrOp().compute1(inputImg);
+		distr.stream().forEach(ii -> uiService.show(ii));
 
 		/*
 		 * 4. e.g. push the result via the DisplayService to a Display (a the

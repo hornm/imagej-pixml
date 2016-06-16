@@ -2,20 +2,23 @@ package net.imagej.pixml.weka.ops;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.StreamSupport;
+import java.util.stream.Collectors;
 
+import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
-import net.imagej.ops.special.hybrid.AbstractBinaryHybridCF;
+import net.imagej.ops.OpService;
+import net.imagej.ops.special.hybrid.AbstractUnaryHybridCF;
 import net.imagej.pixml.ops.PixmlNamespace.Predict;
-import net.imglib2.RandomAccess;
+import net.imglib2.Cursor;
+import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.composite.RealComposite;
-import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Classifier;
-import weka.core.Attribute;
+import weka.core.DenseInstance;
+import weka.core.Instance;
 import weka.core.Instances;
 
 /**
@@ -29,38 +32,54 @@ import weka.core.Instances;
  * @param <T>
  */
 @Plugin(type = Predict.class)
-public class WekaPredictDistr<T extends RealType<T>> extends
-		AbstractBinaryHybridCF<RandomAccessibleInterval<RealComposite<T>>, AbstractClassifier, List<RandomAccessibleInterval<FloatType>>>
+public class WekaPredictDistr<T extends RealType<T>>
+		extends AbstractUnaryHybridCF<IterableInterval<RealComposite<T>>, List<IterableInterval<FloatType>>>
 		implements Predict {
 
-	@Override
-	public void compute2(RandomAccessibleInterval<RealComposite<T>> featImg, AbstractClassifier classifier,
-			List<RandomAccessibleInterval<FloatType>> output) {
-		RandomAccess<RealComposite<T>> featRA = featImg.randomAccess();
-		featRA.setPosition(new long[featImg.numDimensions()]);
+	@Parameter
+	private Classifier classifier;
 
-		// count num of features
-		int numFeat = (int) StreamSupport.stream(featRA.get().spliterator(), false).count();
-		Instances instances = createInstances(numFeat, null);
-	}
+	@Parameter
+	private Instances instances;
+
+	@Parameter
+	private OpService ops;
 
 	@Override
-	public List<RandomAccessibleInterval<FloatType>> createOutput(RandomAccessibleInterval<RealComposite<T>> input1,
-			AbstractClassifier input2) {
-		return null;
-	}
+	public void compute1(IterableInterval<RealComposite<T>> featImg, List<IterableInterval<FloatType>> output) {
+		double[] featVec = new double[instances.numClasses()];
+		Instance instance = new DenseInstance(1.0, featVec);
+		instance.setDataset(instances);
 
-	private Instances createInstances(int numFeat, List<String> classLabels) {
-		// build training set
-		ArrayList<Attribute> attr = new ArrayList<Attribute>();
-		for (int a = 0; a < numFeat; a++) {
-			attr.add(new Attribute("attr" + a));
+		Cursor<RealComposite<T>> featCur = featImg.cursor();
+		List<Cursor<FloatType>> outCur = output.stream().map(ii -> ii.cursor()).collect(Collectors.toList());
+
+		while (featCur.hasNext()) {
+			featCur.fwd();
+			outCur.forEach(c -> c.fwd());
+
+			int i = 0;
+			for (T f : featCur.get()) {
+				featVec[i++] = f.getRealDouble();
+			}
+			try {
+				double[] distr = classifier.distributionForInstance(instance);
+				for (int j = 0; j < distr.length; j++) {
+					outCur.get(j).get().set((float) distr[j]);
+				}
+			} catch (Exception e) {
+				// TODO
+				throw new RuntimeException(e);
+			}
 		}
-		Instances instances = new Instances("data", attr, 0);
-
-		instances.insertAttributeAt(new Attribute("class", classLabels), instances.numAttributes());
-		instances.setClassIndex(instances.numAttributes() - 1);
-		return instances;
 	}
 
+	@Override
+	public List<IterableInterval<FloatType>> createOutput(IterableInterval<RealComposite<T>> input) {
+		ArrayList<IterableInterval<FloatType>> out = new ArrayList<>(instances.numClasses());
+		for (int i = 0; i < instances.numClasses(); i++) {
+			out.add(ops.create().<FloatType> imgFactory().create(input, new FloatType()));
+		}
+		return out;
+	}
 }
