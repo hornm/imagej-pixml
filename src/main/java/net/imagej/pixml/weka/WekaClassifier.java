@@ -48,7 +48,7 @@ public class WekaClassifier implements Classifier {
 	}
 
 	@Override
-	public <T extends RealType<T>> UnaryHybridCF<IterableInterval<T>, List<IterableInterval<FloatType>>> predictDistrOp() {
+	public <T extends RealType<T>> UnaryHybridCF<IterableInterval<RealComposite<T>>, List<IterableInterval<FloatType>>> predictDistrOp() {
 		return ops.op(WekaPredictDistr.class, IterableInterval.class, IterableInterval.class,
 				wekaClassifier, instances);
 	}

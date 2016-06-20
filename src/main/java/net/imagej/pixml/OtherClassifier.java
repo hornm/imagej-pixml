@@ -19,18 +19,18 @@ public class OtherClassifier implements ClassifierFactory {
 	public Classifier createClassifier() {
 		return new Classifier() {
 			
-			@Override
-			public <T extends RealType<T>> UnaryHybridCF<IterableInterval<T>, List<IterableInterval<FloatType>>> predictDistrOp() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
 
 			@Override
 			public <T extends RealType<T>, L> void build(RandomAccessibleInterval<RealComposite<T>> feaetures,
 					RandomAccessibleInterval<LabelingType<L>> labels) {
 				// TODO Auto-generated method stub
 
+			}
+
+			@Override
+			public <T extends RealType<T>> UnaryHybridCF<IterableInterval<RealComposite<T>>, List<IterableInterval<FloatType>>> predictDistrOp() {
+				// TODO Auto-generated method stub
+				return null;
 			}
 		};
 	}

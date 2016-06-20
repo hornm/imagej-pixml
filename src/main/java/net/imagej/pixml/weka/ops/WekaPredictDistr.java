@@ -3,6 +3,7 @@ package net.imagej.pixml.weka.ops;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
@@ -47,13 +48,17 @@ public class WekaPredictDistr<T extends RealType<T>>
 
 	@Override
 	public void compute1(IterableInterval<RealComposite<T>> featImg, List<IterableInterval<FloatType>> output) {
-		double[] featVec = new double[instances.numClasses()];
+		
+		// count num of features
+		int numFeat = (int) StreamSupport.stream(featImg.firstElement().spliterator(), false).count();
+		
+		double[] featVec = new double[numFeat];
 		Instance instance = new DenseInstance(1.0, featVec);
 		instance.setDataset(instances);
 
 		Cursor<RealComposite<T>> featCur = featImg.cursor();
 		List<Cursor<FloatType>> outCur = output.stream().map(ii -> ii.cursor()).collect(Collectors.toList());
-
+		
 		while (featCur.hasNext()) {
 			featCur.fwd();
 			outCur.forEach(c -> c.fwd());

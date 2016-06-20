@@ -48,15 +48,15 @@ public interface Classifier extends Serializable {
 	 *         classes.
 	 * 
 	 */
-	default <T extends RealType<T>, L> UnaryHybridCF<IterableInterval<T>, IterableInterval<LabelingType<L>>> predictOp() {
-		return new AbstractUnaryHybridCF<IterableInterval<T>, IterableInterval<LabelingType<L>>>() {
+	default <T extends RealType<T>, L> UnaryHybridCF<IterableInterval<RealComposite<T>>, IterableInterval<LabelingType<L>>> predictOp() {
+		return new AbstractUnaryHybridCF<IterableInterval<RealComposite<T>>, IterableInterval<LabelingType<L>>>() {
 
 			@Parameter
 			private OpService ops;
 
 			@Override
-			public void compute1(IterableInterval<T> input, IterableInterval<LabelingType<L>> output) {
-				UnaryHybridCF<IterableInterval<T>, List<IterableInterval<FloatType>>> op = predictDistrOp();
+			public void compute1(IterableInterval<RealComposite<T>> input, IterableInterval<LabelingType<L>> output) {
+				UnaryHybridCF<IterableInterval<RealComposite<T>>, List<IterableInterval<FloatType>>> op = predictDistrOp();
 				// TODO convert II to RAI
 				List<RandomAccessibleInterval<FloatType>> distr = null;
 				// = op.compute1(input).stream().map(ii -> {
@@ -85,7 +85,7 @@ public interface Classifier extends Serializable {
 			}
 
 			@Override
-			public IterableInterval<LabelingType<L>> createOutput(IterableInterval<T> input1) {
+			public IterableInterval<LabelingType<L>> createOutput(IterableInterval<RealComposite<T>> input1) {
 				return ops.create().imgLabeling(input1);
 			}
 		};
@@ -97,6 +97,6 @@ public interface Classifier extends Serializable {
 	 * @return a {@link BinaryHybridCF} that produces the distribution over all
 	 *         classes
 	 */
-	<T extends RealType<T>> UnaryHybridCF<IterableInterval<T>, List<IterableInterval<FloatType>>> predictDistrOp();
+	<T extends RealType<T>> UnaryHybridCF<IterableInterval<RealComposite<T>>, List<IterableInterval<FloatType>>> predictDistrOp();
 
 }

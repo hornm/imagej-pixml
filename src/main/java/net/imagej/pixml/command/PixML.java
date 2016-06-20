@@ -87,7 +87,7 @@ public class PixML<F extends RealType<F>> extends ContextCommand {
 		// TODO: we need to get the ImgLabeling from somewhere else
 		Classifier c = classifierFactory.createClassifier();
 		c.<F, Double> build(composite, toImgLabeling(labelImg));
-		List<IterableInterval<FloatType>> distr = c.predictDistrOp().compute1(inputImg);
+		List<IterableInterval<FloatType>> distr = c.<F>predictDistrOp().compute1(Views.iterable(composite));
 		distr.stream().forEach(ii -> uiService.show(ii));
 
 		/*
