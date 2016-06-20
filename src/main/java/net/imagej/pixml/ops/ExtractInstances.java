@@ -1,4 +1,4 @@
-package net.imagej.pixml.weka.ops;
+package net.imagej.pixml.ops;
 
 import net.imagej.ops.Op;
 import weka.core.Instances;

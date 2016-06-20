@@ -1,4 +1,4 @@
-package net.imagej.pixml;
+package net.imagej.pixml.features;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,19 +10,18 @@ import net.imagej.ops.OpService;
 import net.imagej.ops.special.hybrid.AbstractUnaryHybridCF;
 import net.imagej.ops.special.hybrid.UnaryHybridCF;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.algorithm.neighborhood.HyperSphereShape;
 import net.imglib2.outofbounds.OutOfBoundsBorderFactory;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
 
 @Plugin(type = FeatureSet.class)
-public class VarianceFeature implements FeatureSet {
+public class GaussianFeature implements FeatureSet {
 
 	@Parameter
 	private OpService opService;
 
 	@Parameter
-	private int radius = 1;
+	private double sigma = 1;
 
 	@Override
 	public int getNumFeatures() {
@@ -35,8 +34,8 @@ public class VarianceFeature implements FeatureSet {
 
 			@Override
 			public void compute1(RandomAccessibleInterval<I> input, List<RandomAccessibleInterval<O>> output) {
-				opService.run("filter.variance", Views.iterable(output.get(0)), input, new HyperSphereShape(radius),
-						new OutOfBoundsBorderFactory<>());
+				opService.run("filter.gauss", Views.iterable(output.get(0)), input,
+						sigma, new OutOfBoundsBorderFactory<>());
 			}
 
 			@Override
@@ -48,7 +47,6 @@ public class VarianceFeature implements FeatureSet {
 
 	@Override
 	public String toString() {
-		return "Variance";
+		return "Gaussian";
 	}
-
 }

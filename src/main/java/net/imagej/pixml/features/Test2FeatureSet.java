@@ -1,4 +1,4 @@
-package net.imagej.pixml;
+package net.imagej.pixml.features;
 
 import java.util.List;
 

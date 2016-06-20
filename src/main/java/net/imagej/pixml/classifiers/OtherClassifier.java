@@ -1,4 +1,4 @@
-package net.imagej.pixml;
+package net.imagej.pixml.classifiers;
 
 import java.util.List;
 

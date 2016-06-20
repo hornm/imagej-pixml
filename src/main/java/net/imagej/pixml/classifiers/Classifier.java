@@ -1,4 +1,4 @@
-package net.imagej.pixml;
+package net.imagej.pixml.classifiers;
 
 import java.io.Serializable;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.scijava.plugin.Parameter;
 
+import net.imagej.ops.Op;
 import net.imagej.ops.OpService;
 import net.imagej.ops.special.computer.AbstractUnaryComputerOp;
 import net.imagej.ops.special.computer.UnaryComputerOp;
@@ -23,7 +24,10 @@ import net.imglib2.view.Views;
 import net.imglib2.view.composite.RealComposite;
 
 /**
- * TODO
+ * Represents a general classifier for images. After the classifier has been
+ * build with {@link #build(RandomAccessibleInterval, RandomAccessibleInterval)}
+ * , the predictions can be determined by calling {@link #predictOp()} or
+ * {@link #predictDistrOp()}.
  * 
  * @author Martin Horn
  *
@@ -31,18 +35,29 @@ import net.imglib2.view.composite.RealComposite;
 public interface Classifier extends Serializable {
 
 	/**
-	 * TODO
+	 * Builds the classifier model. Needs to be called before calling any the
+	 * {@link #predictOp()} or {@link #predictDistrOp()} methods.
 	 * 
-	 * @return
+	 * The provided label- and feature images must represent the same intervals!
+	 * Otherwise an {@link IllegalArgumentException} will be thrown.
+	 * 
+	 * @param features
+	 *            the image containing the features
+	 * @param labels
+	 *            the image containing the labels
 	 */
-	<T extends RealType<T>, L> void build(RandomAccessibleInterval<RealComposite<T>> feaetures,
+	<T extends RealType<T>, L> void build(RandomAccessibleInterval<RealComposite<T>> features,
 			RandomAccessibleInterval<LabelingType<L>> labels);
 
 	/**
-	 * TODO
+	 * Returns an {@link UnaryHybridCF} that can be used to perform the actual
+	 * prediction. The result will be returned as a labeled image (i.e. each
+	 * pixel-position receives the predicted class label).
 	 * 
-	 * By default this method returns an Op that uses the distribution to
-	 * determine the final classification result.
+	 * By default this method returns an Op that uses the op provided by
+	 * {@link #predictDistrOp()} to determine the final classification result.
+	 * It takes the maximum over the distribution and assigns the class-idx as
+	 * class-label.
 	 * 
 	 * @return a {@link BinaryHybridCF} that produces the p of all predicted
 	 *         classes.
@@ -92,7 +107,10 @@ public interface Classifier extends Serializable {
 	}
 
 	/**
-	 * TODO
+	 * Returns an {@link UnaryHybridCF} that can be used to perform the actual
+	 * prediction. The result will be returned as a list of images, each
+	 * containing the probabilities for a class. That is, the size of the list
+	 * will equal the number of classes to be predicted.
 	 * 
 	 * @return a {@link BinaryHybridCF} that produces the distribution over all
 	 *         classes

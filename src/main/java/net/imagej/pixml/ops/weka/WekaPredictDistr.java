@@ -1,4 +1,4 @@
-package net.imagej.pixml.weka.ops;
+package net.imagej.pixml.ops.weka;
 
 import java.util.ArrayList;
 import java.util.List;

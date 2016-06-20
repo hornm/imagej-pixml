@@ -1,4 +1,4 @@
-package net.imagej.pixml.command;
+package net.imagej.pixml.commands;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,9 +15,9 @@ import org.scijava.ui.UIService;
 
 import net.imagej.ImgPlus;
 import net.imagej.ops.OpService;
-import net.imagej.pixml.Classifier;
-import net.imagej.pixml.ClassifierFactory;
-import net.imagej.pixml.FeatureSets;
+import net.imagej.pixml.classifiers.Classifier;
+import net.imagej.pixml.classifiers.ClassifierFactory;
+import net.imagej.pixml.features.FeatureSets;
 import net.imagej.pixml.service.PixMLService;
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;

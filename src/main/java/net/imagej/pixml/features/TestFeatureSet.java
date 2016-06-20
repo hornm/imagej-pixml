@@ -1,27 +1,21 @@
-package net.imagej.pixml;
+package net.imagej.pixml.features;
 
 import java.util.List;
 
 import org.scijava.plugin.Plugin;
 
-import net.imagej.ops.OpRef;
 import net.imagej.ops.special.hybrid.UnaryHybridCF;
-import net.imagej.pixml.command.TestFeatureSetConfig;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
 @Plugin(type = FeatureSet.class)
 public class TestFeatureSet implements FeatureSet {
-	
-	private TestFeatureSetConfig featureSetConfig;
-
 
 	@Override
 	public int getNumFeatures() {
 		return 1;
 	}
 
-	
 	@Override
 	public String toString() {
 		return "Test Feature Set";

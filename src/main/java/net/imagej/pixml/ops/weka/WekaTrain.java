@@ -1,10 +1,11 @@
-package net.imagej.pixml.weka.ops;
+package net.imagej.pixml.ops.weka;
 
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 import net.imagej.ops.OpService;
 import net.imagej.ops.special.function.AbstractBinaryFunctionOp;
+import net.imagej.pixml.ops.ExtractInstances;
 import net.imagej.pixml.ops.PixmlNamespace;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.roi.labeling.LabelingType;

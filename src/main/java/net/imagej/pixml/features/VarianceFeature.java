@@ -1,4 +1,4 @@
-package net.imagej.pixml;
+package net.imagej.pixml.features;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +16,7 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
 
 @Plugin(type = FeatureSet.class)
-public class MaximumFeature implements FeatureSet {
+public class VarianceFeature implements FeatureSet {
 
 	@Parameter
 	private OpService opService;
@@ -35,7 +35,7 @@ public class MaximumFeature implements FeatureSet {
 
 			@Override
 			public void compute1(RandomAccessibleInterval<I> input, List<RandomAccessibleInterval<O>> output) {
-				opService.run("filter.max", Views.iterable(output.get(0)), input, new HyperSphereShape(radius),
+				opService.run("filter.variance", Views.iterable(output.get(0)), input, new HyperSphereShape(radius),
 						new OutOfBoundsBorderFactory<>());
 			}
 
@@ -48,7 +48,7 @@ public class MaximumFeature implements FeatureSet {
 
 	@Override
 	public String toString() {
-		return "Maximum";
+		return "Variance";
 	}
 
 }

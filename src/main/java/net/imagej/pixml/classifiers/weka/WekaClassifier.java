@@ -1,13 +1,13 @@
-package net.imagej.pixml.weka;
+package net.imagej.pixml.classifiers.weka;
 
 import java.util.List;
 
 import net.imagej.ops.OpService;
 import net.imagej.ops.special.hybrid.UnaryHybridCF;
-import net.imagej.pixml.Classifier;
+import net.imagej.pixml.classifiers.Classifier;
+import net.imagej.pixml.ops.ExtractInstances;
 import net.imagej.pixml.ops.PixmlNamespace.Predict;
-import net.imagej.pixml.weka.ops.ExtractInstances;
-import net.imagej.pixml.weka.ops.WekaPredictDistr;
+import net.imagej.pixml.ops.weka.WekaPredictDistr;
 import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.roi.labeling.LabelingType;
@@ -16,6 +16,12 @@ import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.composite.RealComposite;
 import weka.core.Instances;
 
+/**
+ * An image classifier that makes use of weka ({@link weka.classifiers.Classifier}).
+ * 
+ * @author Martin Horn
+ *
+ */
 public class WekaClassifier implements Classifier {
 
 	private weka.classifiers.Classifier wekaClassifier;

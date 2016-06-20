@@ -1,24 +1,20 @@
-package net.imagej.pixml.weka;
-
-import java.util.List;
+package net.imagej.pixml.classifiers.weka;
 
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 import net.imagej.ops.OpService;
-import net.imagej.ops.special.function.BinaryFunctionOp;
-import net.imagej.ops.special.hybrid.BinaryHybridCF;
-import net.imagej.pixml.Classifier;
-import net.imagej.pixml.ClassifierFactory;
-import net.imagej.pixml.weka.ops.WekaTrain;
-import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.roi.labeling.LabelingType;
-import net.imglib2.type.numeric.RealType;
-import net.imglib2.type.numeric.real.FloatType;
-import net.imglib2.view.composite.RealComposite;
+import net.imagej.pixml.classifiers.Classifier;
+import net.imagej.pixml.classifiers.ClassifierFactory;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.trees.J48;
 
+/**
+ * Classifier factory that creates image classifiers that make use of weka (
+ * {@link weka.classifiers.Classifier}).
+ * 
+ * @author Martin Horn
+ */
 @Plugin(type = ClassifierFactory.class)
 public class WekaClassifierFactory implements ClassifierFactory {
 

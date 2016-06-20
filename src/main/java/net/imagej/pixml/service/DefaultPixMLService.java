@@ -7,8 +7,8 @@ import org.scijava.plugin.Plugin;
 import org.scijava.plugin.PluginService;
 import org.scijava.service.AbstractService;
 
-import net.imagej.pixml.ClassifierFactory;
-import net.imagej.pixml.FeatureSet;
+import net.imagej.pixml.classifiers.ClassifierFactory;
+import net.imagej.pixml.features.FeatureSet;
 
 @Plugin(type = PixMLService.class)
 public class DefaultPixMLService extends AbstractService implements PixMLService {

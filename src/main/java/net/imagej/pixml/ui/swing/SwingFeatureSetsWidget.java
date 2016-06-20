@@ -18,8 +18,8 @@ import org.scijava.ui.swing.widget.SwingInputWidget;
 import org.scijava.widget.InputWidget;
 import org.scijava.widget.WidgetModel;
 
-import net.imagej.pixml.FeatureSet;
-import net.imagej.pixml.FeatureSets;
+import net.imagej.pixml.features.FeatureSet;
+import net.imagej.pixml.features.FeatureSets;
 import net.imagej.pixml.service.PixMLService;
 
 /**

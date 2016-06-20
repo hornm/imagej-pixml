@@ -1,4 +1,4 @@
-package net.imagej.pixml;
+package net.imagej.pixml.features;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,13 +15,16 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
 
 @Plugin(type = FeatureSet.class)
-public class GaussianFeature implements FeatureSet {
+public class DoGFeature implements FeatureSet {
 
 	@Parameter
 	private OpService opService;
 
 	@Parameter
-	private double sigma = 1;
+	private double sigma1 = 1;
+
+	@Parameter
+	private double sigma2 = 2;
 
 	@Override
 	public int getNumFeatures() {
@@ -34,8 +37,8 @@ public class GaussianFeature implements FeatureSet {
 
 			@Override
 			public void compute1(RandomAccessibleInterval<I> input, List<RandomAccessibleInterval<O>> output) {
-				opService.run("filter.gauss", Views.iterable(output.get(0)), input,
-						sigma, new OutOfBoundsBorderFactory<>());
+				opService.run("filter.dog", Views.iterable(output.get(0)), input,
+						sigma1, sigma2, new OutOfBoundsBorderFactory<>());
 			}
 
 			@Override
@@ -47,6 +50,6 @@ public class GaussianFeature implements FeatureSet {
 
 	@Override
 	public String toString() {
-		return "Gaussian";
+		return "DoG";
 	}
 }
